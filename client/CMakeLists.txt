@@ -1,4 +1,4 @@
-set(BINARY KeyPressClassifier)
+set(BINARY FilterLibrary)
 
 
 set(LINK_JUCE
@@ -7,6 +7,7 @@ set(LINK_JUCE
         juce::juce_audio_utils)
 
 set(LINK_COMMON
+        movingaverage
 )
 
 set(SOURCES
@@ -21,11 +22,11 @@ set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ui/dist/)
 
 juce_add_plugin(
         ${BINARY}
-        PLUGIN_MANUFACTURER_CODE Keyp
-        PLUGIN_CODE Keyp
-        PRODUCT_NAME KeyPressClassifier
-        COMPANY_NAME KeyPress
-        BUNDLE_ID com.keypress.keypress
+        PLUGIN_MANUFACTURER_CODE Filt
+        PLUGIN_CODE Filt
+        PRODUCT_NAME FilterLibrary
+        COMPANY_NAME FilterLibrary
+        BUNDLE_ID com.filterlibrary.filterlibrary
         ../VERSION 0.0.2
         FORMATS AU VST3 Standalone
         COPY_PLUGIN_AFTER_BUILD TRUE

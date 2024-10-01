@@ -1,0 +1,10 @@
+add_module(
+        MODULE
+        movingaverage
+        SOURCES
+        src/movingaverage/MovingAverage.cpp
+        src/movingaverage/MovingAverage.h
+        DEPS
+        juce::juce_audio_basics
+        juce::juce_audio_formats
+)
