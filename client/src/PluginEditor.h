@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
+#include "relays/ParameterRelay.h"
 
 #include <juce_gui_extra/juce_gui_extra.h>
 
@@ -40,7 +41,10 @@ private:
             .withResourceProvider ([this] (const auto & url) { return GetResource (url); },
                                    juce::URL {kLocalDevServerAddress}.getOrigin ());
 
+    ParameterRelay parameter_relay_;
     SinglePageBrowser web_browser_component_;
+
+    ParameterAttachments parameter_attachments_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

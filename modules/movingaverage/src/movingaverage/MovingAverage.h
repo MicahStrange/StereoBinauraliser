@@ -1,14 +1,19 @@
-//
-// Created by Micah Strange on 01/10/2024.
-//
+#pragma once
+#include <juce_dsp/juce_dsp.h>
 
-#ifndef FILTERLIBRARY_MODULES_MOVINGAVERAGE_SRC_MOVINGAVERAGE_MOVINGAVERAGE_H_
-#define FILTERLIBRARY_MODULES_MOVINGAVERAGE_SRC_MOVINGAVERAGE_MOVINGAVERAGE_H_
-
-class MovingAverage
+class MovingAverage : public juce::dsp::ProcessorBase
 {
 public:
-private:
-};
+    void prepare (const juce::dsp::ProcessSpec & spec) override;
+    void process (const juce::dsp::ProcessContextReplacing<float> & replacing) override;
+    void reset () override;
 
-#endif // FILTERLIBRARY_MODULES_MOVINGAVERAGE_SRC_MOVINGAVERAGE_MOVINGAVERAGE_H_
+private:
+    const int MaxDelaySamples = 1024;
+    int filter_size = 100;
+
+    juce::AudioBuffer<float> circ_buff_;
+    std::vector<float> average_;
+    int read_head_;
+    int write_head_;
+};

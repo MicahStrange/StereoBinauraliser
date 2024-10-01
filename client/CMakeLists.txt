@@ -8,6 +8,7 @@ set(LINK_JUCE
 
 set(LINK_COMMON
         movingaverage
+        model
 )
 
 set(SOURCES
@@ -15,6 +16,8 @@ set(SOURCES
         src/PluginProcessor.cpp
         src/PluginEditor.h
         src/PluginEditor.cpp
+        src/relays/ParameterRelay.cpp
+        src/relays/ParameterRelay.h
 )
 
 option(DEV_LOCALHOST OFF)

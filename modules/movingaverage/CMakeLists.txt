@@ -4,6 +4,8 @@ add_module(
         SOURCES
         src/movingaverage/MovingAverage.cpp
         src/movingaverage/MovingAverage.h
+        src/utils/CircularBuffer.cpp
+        src/utils/CircularBuffer.h
         DEPS
         juce::juce_audio_basics
         juce::juce_audio_formats

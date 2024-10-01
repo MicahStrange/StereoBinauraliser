@@ -1,1 +1,2 @@
 add_subdirectory(movingaverage)
+add_subdirectory(model)

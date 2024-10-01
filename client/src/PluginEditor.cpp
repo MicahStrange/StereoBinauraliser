@@ -77,7 +77,9 @@ PluginEditor::GetResource (const juce::String & url)
 PluginEditor::PluginEditor (PluginProcessor & p)
     : AudioProcessorEditor (&p)
     , processorRef (p)
-    , web_browser_component_ (kBaseWebOptions)
+    , parameter_relay_ (web_browser_component_)
+    , web_browser_component_ (kBaseWebOptions.withOptionsFrom (parameter_relay_))
+    , parameter_attachments_ (parameter_relay_, p.parameter_tree_state_)
 {
     juce::ignoreUnused (processorRef);
     asset_directory_ = GetAssetsDirectory ();

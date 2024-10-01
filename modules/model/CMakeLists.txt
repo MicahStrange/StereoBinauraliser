@@ -1,0 +1,11 @@
+add_module(
+        MODULE
+        model
+        SOURCES
+        src/model/ParameterTree.h
+        src/model/ParameterTree.cpp
+        src/model/ParameterUtils.h
+        src/model/ParameterUtils.cpp
+        DEPS
+        juce::juce_core
+)
