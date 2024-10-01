@@ -9,4 +9,5 @@ add_module(
         DEPS
         juce::juce_audio_basics
         juce::juce_audio_formats
+        model
 )

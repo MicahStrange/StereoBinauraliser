@@ -10,10 +10,11 @@ const Root = () => {
     return (
         <div
             className="flex flex-row h-screen bg-background relative select-none"
-            data-theme="light"
+            data-theme="dark"
         >
             <div className="w-full ml-0.5">
                 <Knob identifier={Parameters.Input}/>
+                <Knob identifier={Parameters.FilterSize}/>
             </div>
         </div>
     );

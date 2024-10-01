@@ -1,6 +1,11 @@
 
 #include "MovingAverage.h"
 
+MovingAverage::MovingAverage (ParameterTree & parameter_tree)
+    : parameter_tree_ (parameter_tree)
+{
+}
+
 void MovingAverage::prepare (const juce::dsp::ProcessSpec & spec)
 {
     jassert (MaxDelaySamples > spec.maximumBlockSize);
@@ -8,6 +13,8 @@ void MovingAverage::prepare (const juce::dsp::ProcessSpec & spec)
     circ_buff_.clear ();
 
     average_.resize (spec.numChannels);
+    write_head_ = 0;
+    reset ();
 }
 
 void MovingAverage::process (const juce::dsp::ProcessContextReplacing<float> & replacing)
@@ -15,6 +22,9 @@ void MovingAverage::process (const juce::dsp::ProcessContextReplacing<float> & r
     auto input_block = replacing.getInputBlock ();
     auto output_block = replacing.getOutputBlock ();
     auto circ_buff_size = circ_buff_.getNumSamples ();
+
+    filter_size = static_cast<int> (
+        std::clamp (static_cast<int> (*parameter_tree_.filter_size_parameter), 1, circ_buff_size));
 
     for (auto sample_index = 0; sample_index < input_block.getNumSamples (); ++sample_index)
     {
@@ -47,5 +57,6 @@ void MovingAverage::reset ()
         average_ [i] = 0;
     }
     write_head_ = 0;
-    read_head_ = (write_head_ - filter_size) % circ_buff_.getNumSamples ();
+    read_head_ =
+        ((write_head_ - filter_size) + circ_buff_.getNumSamples ()) % circ_buff_.getNumSamples ();
 }

@@ -22,12 +22,14 @@ private:
 
     juce::WebSliderRelay input_gain_relay_ {web_browser_component_,
                                             ParameterTree::kInputGainParameterId};
+    juce::WebSliderRelay filter_size_relay_ {web_browser_component_,
+                                             ParameterTree::kFilterSizeParameterId};
 };
 
 /**
- * This is annoying that this is needed. It appears that the destruction order of this needs to come
- * before the web browser component. However relays should appear before the construction of the
- * browser.
+ * This is annoying that this is needed. It appears that the destruction order of this needs to
+ * come before the web browser component. However relays should appear before the construction
+ * of the browser.
  */
 class ParameterAttachments
 {
@@ -37,4 +39,5 @@ public:
 
 private:
     juce::WebSliderParameterAttachment input_gain_attachment_;
+    juce::WebSliderParameterAttachment filter_size_attachment_;
 };

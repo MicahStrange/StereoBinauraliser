@@ -11,6 +11,7 @@ PluginProcessor::PluginProcessor ()
                              nullptr,
                              ParameterTree::kParameterTreeIdentifier,
                              CreateParameterLayout ())
+    , moving_average_ (parameter_tree_)
 {
 }
 
@@ -142,7 +143,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float> & buffer,
     auto context_replacing = juce::dsp::ProcessContextReplacing<float> (block);
 
     context_replacing.getOutputBlock ().multiplyBy (smoothed_input_gain_);
-    //    moving_average_.process (context_replacing);
+    moving_average_.process (context_replacing);
 }
 
 //==============================================================================
