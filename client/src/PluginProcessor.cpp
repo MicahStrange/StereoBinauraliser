@@ -11,7 +11,8 @@ PluginProcessor::PluginProcessor ()
                              nullptr,
                              ParameterTree::kParameterTreeIdentifier,
                              CreateParameterLayout ())
-    , moving_average_ (parameter_tree_)
+    , moving_average_low_ (parameter_tree_)
+    , moving_average_high_ (parameter_tree_, true)
 {
 }
 
@@ -96,14 +97,16 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
                                         static_cast<unsigned int> (getTotalNumInputChannels ())};
 
     smoothed_input_gain_.reset (spec.sampleRate, 0.1f);
-    moving_average_.prepare (spec);
+    moving_average_low_.prepare (spec);
+    moving_average_high_.prepare (spec);
 }
 
 void PluginProcessor::releaseResources ()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    moving_average_.reset ();
+    moving_average_low_.reset ();
+    moving_average_high_.reset ();
 }
 
 bool PluginProcessor::isBusesLayoutSupported (const BusesLayout & layouts) const
@@ -143,7 +146,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float> & buffer,
     auto context_replacing = juce::dsp::ProcessContextReplacing<float> (block);
 
     context_replacing.getOutputBlock ().multiplyBy (smoothed_input_gain_);
-    moving_average_.process (context_replacing);
+    moving_average_low_.process (context_replacing);
+    moving_average_high_.process (context_replacing);
 }
 
 //==============================================================================

@@ -1,8 +1,9 @@
 
 #include "MovingAverage.h"
 
-MovingAverage::MovingAverage (ParameterTree & parameter_tree)
+MovingAverage::MovingAverage (ParameterTree & parameter_tree, bool high_pass)
     : parameter_tree_ (parameter_tree)
+    , high_pass_ (high_pass)
 {
 }
 
@@ -23,8 +24,9 @@ void MovingAverage::process (const juce::dsp::ProcessContextReplacing<float> & r
     auto output_block = replacing.getOutputBlock ();
     auto circ_buff_size = circ_buff_.getNumSamples ();
 
-    filter_size = static_cast<int> (
-        std::clamp (static_cast<int> (*parameter_tree_.filter_size_parameter), 1, circ_buff_size));
+    float parameter = high_pass_ ? *parameter_tree_.filter_size_high_parameter
+                                 : *parameter_tree_.filter_size_low_parameter;
+    filter_size = static_cast<int> (std::clamp (static_cast<int> (parameter), 1, circ_buff_size));
 
     for (auto sample_index = 0; sample_index < input_block.getNumSamples (); ++sample_index)
     {
@@ -42,7 +44,9 @@ void MovingAverage::process (const juce::dsp::ProcessContextReplacing<float> & r
             average_ [channel_index] = average_ [channel_index] - (sample_to_remove / filter_size);
 
             // write total into output buffer
-            output_block.setSample (channel_index, sample_index, average_ [channel_index]);
+            auto output_sample =
+                high_pass_ ? sample_to_add - average_ [channel_index] : average_ [channel_index];
+            output_block.setSample (channel_index, sample_index, output_sample);
         }
         write_head_ = (write_head_ + 1) % circ_buff_size;
         read_head_ = ((write_head_ - filter_size) + circ_buff_size) % circ_buff_size;

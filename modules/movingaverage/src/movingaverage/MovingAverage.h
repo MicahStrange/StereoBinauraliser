@@ -7,12 +7,13 @@
 class MovingAverage : public juce::dsp::ProcessorBase
 {
 public:
-    MovingAverage (ParameterTree & parameter_tree);
+    MovingAverage (ParameterTree & parameter_tree, bool high_pass = false);
     void prepare (const juce::dsp::ProcessSpec & spec) override;
     void process (const juce::dsp::ProcessContextReplacing<float> & replacing) override;
     void reset () override;
 
 private:
+    bool high_pass_;
     const int MaxDelaySamples = 1024;
     int filter_size = 100;
 

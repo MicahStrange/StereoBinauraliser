@@ -5,7 +5,8 @@
 const juce::Identifier ParameterTree::kParameterTreeIdentifier {"zones_parameter_tree"};
 
 const juce::String ParameterTree::kInputGainParameterId {"input_gain_parameter"};
-const juce::String ParameterTree::kFilterSizeParameterId {"filter_size_parameter"};
+const juce::String ParameterTree::kFilterSizeLowParameterId {"filter_size_low_parameter"};
+const juce::String ParameterTree::kFilterSizeHighParameterId {"filter_size_high_parameter"};
 
 ParameterTree
 ParameterTree::CreateParameterTree (juce::AudioProcessorValueTreeState::ParameterLayout & layout)
@@ -21,10 +22,19 @@ ParameterTree::CreateParameterTree (juce::AudioProcessorValueTreeState::Paramete
                 0.f,
                 juce::AudioParameterFloatAttributes ().withLabel ("dB")),
             layout),
-        .filter_size_parameter = ParameterUtils::BindLayoutParameter (
+        .filter_size_low_parameter = ParameterUtils::BindLayoutParameter (
             std::make_unique<juce::AudioParameterFloat> (
-                juce::ParameterID {kFilterSizeParameterId, 1},
-                "FilterSize",
+                juce::ParameterID {kFilterSizeLowParameterId, 1},
+                "FilterSizeLow",
+                ParameterUtils::WithSkewedCentre (juce::NormalisableRange<float> (0, 1000.f),
+                                                  100.f),
+                1.f,
+                juce::AudioParameterFloatAttributes ()),
+            layout),
+        .filter_size_high_parameter = ParameterUtils::BindLayoutParameter (
+            std::make_unique<juce::AudioParameterFloat> (
+                juce::ParameterID {kFilterSizeHighParameterId, 1},
+                "FilterSizeHigh",
                 ParameterUtils::WithSkewedCentre (juce::NormalisableRange<float> (0, 1000.f),
                                                   100.f),
                 1.f,

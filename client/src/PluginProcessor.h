@@ -46,10 +46,11 @@ public:
 
 private:
     void UpdateParameters ();
-    
+
     juce::AudioProcessorValueTreeState::ParameterLayout CreateParameterLayout ();
 
     juce::SmoothedValue<float> smoothed_input_gain_;
-    MovingAverage moving_average_;
+    MovingAverage moving_average_low_;
+    MovingAverage moving_average_high_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

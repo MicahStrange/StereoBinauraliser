@@ -14,7 +14,8 @@ const Root = () => {
         >
             <div className="w-full ml-0.5">
                 <Knob identifier={Parameters.Input}/>
-                <Knob identifier={Parameters.FilterSize}/>
+                <Knob identifier={Parameters.FilterSizeLow}/>
+                <Knob identifier={Parameters.FilterSizeHigh}/>
             </div>
         </div>
     );

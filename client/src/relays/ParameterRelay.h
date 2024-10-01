@@ -22,8 +22,10 @@ private:
 
     juce::WebSliderRelay input_gain_relay_ {web_browser_component_,
                                             ParameterTree::kInputGainParameterId};
-    juce::WebSliderRelay filter_size_relay_ {web_browser_component_,
-                                             ParameterTree::kFilterSizeParameterId};
+    juce::WebSliderRelay filter_size_low_relay_ {web_browser_component_,
+                                                 ParameterTree::kFilterSizeLowParameterId};
+    juce::WebSliderRelay filter_size_high_relay_ {web_browser_component_,
+                                                  ParameterTree::kFilterSizeHighParameterId};
 };
 
 /**
@@ -39,5 +41,6 @@ public:
 
 private:
     juce::WebSliderParameterAttachment input_gain_attachment_;
-    juce::WebSliderParameterAttachment filter_size_attachment_;
+    juce::WebSliderParameterAttachment filter_size_low_attachment_;
+    juce::WebSliderParameterAttachment filter_size_high_attachment_;
 };
