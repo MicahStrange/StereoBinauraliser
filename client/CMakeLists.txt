@@ -9,6 +9,7 @@ set(LINK_JUCE
 set(LINK_COMMON
         movingaverage
         model
+        sofa_renderer
 )
 
 set(SOURCES

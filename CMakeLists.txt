@@ -15,4 +15,8 @@ add_subdirectory(JUCE)
 add_subdirectory(client)
 add_subdirectory(modules)
 
+add_subdirectory(3dti_AudioToolkit)
+#target_link_libraries(FilterLibrary 3dti_AudioToolkit)
+
+
 

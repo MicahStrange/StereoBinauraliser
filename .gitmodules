@@ -10,3 +10,6 @@
 	path = cmake
 	url = https://github.com/sudara/cmake-includes.git
 	branch = main
+[submodule "3dti_AudioToolkit"]
+	path = 3dti_AudioToolkit
+	url = git@github.com:3DTune-In/3dti_AudioToolkit.git

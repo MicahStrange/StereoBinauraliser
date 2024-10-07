@@ -9,5 +9,5 @@ add_module(
         src/sofa_renderer/SofaDodecRenderer.cpp
         src/sofa_renderer/SofaStereoRenderer.h
         src/sofa_renderer/SofaStereoRenderer.cpp
-        DEPS juce::juce_core juce::juce_dsp
+        DEPS juce::juce_core juce::juce_dsp 3dti_AudioToolkit
 )

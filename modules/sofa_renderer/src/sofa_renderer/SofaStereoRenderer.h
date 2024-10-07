@@ -1,4 +1,5 @@
 #pragma once
+
 #include "SofaFilter.h"
 #include "SofaRenderer.h"
 
