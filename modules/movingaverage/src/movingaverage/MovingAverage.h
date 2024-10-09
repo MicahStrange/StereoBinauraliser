@@ -2,8 +2,8 @@
 
 #include "model/ParameterTree.h"
 
+#include <Common/DynamicExpanderMono.h>
 #include <juce_dsp/juce_dsp.h>
-
 class MovingAverage : public juce::dsp::ProcessorBase
 {
 public:

@@ -10,4 +10,5 @@ add_module(
         juce::juce_audio_basics
         juce::juce_audio_formats
         model
+        3dti_AudioToolkit
 )
