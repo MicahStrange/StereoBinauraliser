@@ -34,8 +34,8 @@ private:
     juce::AudioBuffer<float> renderer_output_buffer_;
 
     static constexpr std::array<SofaFilter::SphericalCoordinates, 2> kSphericalCoordinates {
-        SofaFilter::SphericalCoordinates {.azimuth_degrees = -70.f, .elevation_degrees = 0.f},
-        SofaFilter::SphericalCoordinates {.azimuth_degrees = 70.f, .elevation_degrees = 0.f}
+        SofaFilter::SphericalCoordinates {.azimuth_degrees = -45.f, .elevation_degrees = 0.f},
+        SofaFilter::SphericalCoordinates {.azimuth_degrees = 45.f, .elevation_degrees = 0.f}
 
     };
 

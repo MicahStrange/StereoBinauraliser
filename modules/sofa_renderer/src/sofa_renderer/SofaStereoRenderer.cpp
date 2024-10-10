@@ -32,7 +32,7 @@ void SofaStereoRenderer::prepare (const juce::dsp::ProcessSpec & spec)
                                                   sample_rate_);
     }
 
-    renderer_input_buffer_.setSize (1, (int) spec.maximumBlockSize);
+    renderer_input_buffer_.setSize (2, (int) spec.maximumBlockSize);
     renderer_output_buffer_.setSize (2, (int) spec.maximumBlockSize);
 }
 void SofaStereoRenderer::process (
@@ -87,14 +87,15 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
     juce::dsp::AudioBlock<float> renderer_output_block {renderer_output_buffer_};
     renderer_output_block = renderer_output_block.getSubBlock (0, output_block.getNumSamples ());
 
+    renderer_input_block.clear ();
+
+    renderer_input_block.add (input_block).multiplyBy (0.5f);
+    output_block.clear ();
+
     for (auto renderer_index = 0; renderer_index < sofa_renderers_.size (); renderer_index++)
     {
-        renderer_input_block.clear ();
-
-        renderer_input_block.add (input_block.getSingleChannelBlock (0)).multiplyBy (0.3f);
-
-        juce::dsp::ProcessContextNonReplacing<float> renderer_context {renderer_input_block,
-                                                                       renderer_output_block};
+        juce::dsp::ProcessContextNonReplacing<float> renderer_context {
+            renderer_input_block.getSingleChannelBlock (renderer_index), renderer_output_block};
         sofa_renderers_ [renderer_index].process (renderer_context);
 
         output_block.add (renderer_output_block);
