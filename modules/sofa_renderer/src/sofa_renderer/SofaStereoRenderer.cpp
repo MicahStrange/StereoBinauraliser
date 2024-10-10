@@ -4,7 +4,8 @@
 
 #include "SofaStereoRenderer.h"
 
-SofaStereoRenderer::SofaStereoRenderer ()
+SofaStereoRenderer::SofaStereoRenderer (ParameterTree & parameter_tree)
+    : parameter_tree_ (parameter_tree)
 {
     for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
     {
@@ -53,13 +54,7 @@ void SofaStereoRenderer::process (
     {
         renderer_input_block.clear ();
 
-        //        for (auto channel_index = 0; channel_index < input_block.getNumChannels ();
-        //        ++channel_index)
-        //        {
-        //            auto channel = input_block.getSingleChannelBlock (channel_index);
-        //            renderer_input_block.addProductOf (channel, kGainTable
-        //            [renderer_index][channel_index]);
-        //        }
+        renderer_input_block.add (input_block);
 
         juce::dsp::ProcessContextNonReplacing<float> renderer_context {renderer_input_block,
                                                                        renderer_output_block};
@@ -73,4 +68,35 @@ void SofaStereoRenderer::reset ()
 {
     for (auto & sofa_renderer : sofa_renderers_)
         sofa_renderer.reset ();
+}
+
+void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float> & replacing)
+{
+    auto input_block = replacing.getInputBlock ();
+    auto output_block = replacing.getOutputBlock ();
+
+    jassert (input_block.getNumChannels () == 2);
+    jassert (output_block.getNumChannels () == 2);
+
+    if (*parameter_tree_.binaural_parameter > 0.5)
+        return;
+
+    juce::dsp::AudioBlock<float> renderer_input_block {renderer_input_buffer_};
+    renderer_input_block = renderer_input_block.getSubBlock (0, input_block.getNumSamples ());
+
+    juce::dsp::AudioBlock<float> renderer_output_block {renderer_output_buffer_};
+    renderer_output_block = renderer_output_block.getSubBlock (0, output_block.getNumSamples ());
+
+    for (auto renderer_index = 0; renderer_index < sofa_renderers_.size (); renderer_index++)
+    {
+        renderer_input_block.clear ();
+
+        renderer_input_block.add (input_block.getSingleChannelBlock (0)).multiplyBy (0.3f);
+
+        juce::dsp::ProcessContextNonReplacing<float> renderer_context {renderer_input_block,
+                                                                       renderer_output_block};
+        sofa_renderers_ [renderer_index].process (renderer_context);
+
+        output_block.add (renderer_output_block);
+    }
 }

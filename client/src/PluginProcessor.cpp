@@ -13,6 +13,7 @@ PluginProcessor::PluginProcessor ()
                              CreateParameterLayout ())
     , moving_average_low_ (parameter_tree_)
     , moving_average_high_ (parameter_tree_, true)
+    , sofa_stereo_renderer_ (parameter_tree_)
 {
 }
 
@@ -99,6 +100,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     smoothed_input_gain_.reset (spec.sampleRate, 0.1f);
     moving_average_low_.prepare (spec);
     moving_average_high_.prepare (spec);
+    sofa_stereo_renderer_.prepare (spec);
 }
 
 void PluginProcessor::releaseResources ()
@@ -107,6 +109,7 @@ void PluginProcessor::releaseResources ()
     // spare memory, etc.
     moving_average_low_.reset ();
     moving_average_high_.reset ();
+    sofa_stereo_renderer_.reset ();
 }
 
 bool PluginProcessor::isBusesLayoutSupported (const BusesLayout & layouts) const
@@ -148,6 +151,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float> & buffer,
     context_replacing.getOutputBlock ().multiplyBy (smoothed_input_gain_);
     moving_average_low_.process (context_replacing);
     moving_average_high_.process (context_replacing);
+    sofa_stereo_renderer_.process (context_replacing);
 }
 
 //==============================================================================

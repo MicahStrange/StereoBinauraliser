@@ -1,5 +1,7 @@
 #pragma once
 
+#include "sofa_renderer/SofaStereoRenderer.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #if (MSVC)
@@ -48,6 +50,8 @@ private:
     void UpdateParameters ();
 
     juce::AudioProcessorValueTreeState::ParameterLayout CreateParameterLayout ();
+
+    SofaStereoRenderer sofa_stereo_renderer_;
 
     juce::SmoothedValue<float> smoothed_input_gain_;
     MovingAverage moving_average_low_;

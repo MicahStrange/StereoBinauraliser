@@ -16,6 +16,7 @@ const Root = () => {
                 <Knob identifier={Parameters.Input}/>
                 <Knob identifier={Parameters.FilterSizeLow}/>
                 <Knob identifier={Parameters.FilterSizeHigh}/>
+                <Knob identifier={Parameters.Binaural}/>
             </div>
         </div>
     );

@@ -7,6 +7,7 @@ const juce::Identifier ParameterTree::kParameterTreeIdentifier {"zones_parameter
 const juce::String ParameterTree::kInputGainParameterId {"input_gain_parameter"};
 const juce::String ParameterTree::kFilterSizeLowParameterId {"filter_size_low_parameter"};
 const juce::String ParameterTree::kFilterSizeHighParameterId {"filter_size_high_parameter"};
+const juce::String ParameterTree::kBinauralParameterId {"binaural_parameter"};
 
 ParameterTree
 ParameterTree::CreateParameterTree (juce::AudioProcessorValueTreeState::ParameterLayout & layout)
@@ -37,6 +38,14 @@ ParameterTree::CreateParameterTree (juce::AudioProcessorValueTreeState::Paramete
                 "FilterSizeHigh",
                 ParameterUtils::WithSkewedCentre (juce::NormalisableRange<float> (0, 1000.f),
                                                   100.f),
+                1000.f,
+                juce::AudioParameterFloatAttributes ()),
+            layout),
+        .binaural_parameter = ParameterUtils::BindLayoutParameter (
+            std::make_unique<juce::AudioParameterFloat> (
+                juce::ParameterID {kBinauralParameterId, 1},
+                "Binaural",
+                ParameterUtils::WithSkewedCentre (juce::NormalisableRange<float> (0, 1.f), 0.5f),
                 1.f,
                 juce::AudioParameterFloatAttributes ()),
             layout)};

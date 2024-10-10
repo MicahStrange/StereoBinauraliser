@@ -11,6 +11,7 @@ public:
     juce::AudioParameterFloat * input_gain_parameter;
     juce::AudioParameterFloat * filter_size_low_parameter;
     juce::AudioParameterFloat * filter_size_high_parameter;
+    juce::AudioParameterFloat * binaural_parameter;
 
     static ParameterTree
     CreateParameterTree (juce::AudioProcessorValueTreeState::ParameterLayout & layout);
@@ -19,4 +20,5 @@ public:
     static const juce::String kInputGainParameterId;
     static const juce::String kFilterSizeLowParameterId;
     static const juce::String kFilterSizeHighParameterId;
+    static const juce::String kBinauralParameterId;
 };

@@ -10,7 +10,8 @@ ParameterRelay::buildOptions (const juce::WebBrowserComponent::Options & initial
 {
     return initialOptions.withOptionsFrom (input_gain_relay_)
         .withOptionsFrom (filter_size_low_relay_)
-        .withOptionsFrom (filter_size_high_relay_);
+        .withOptionsFrom (filter_size_high_relay_)
+        .withOptionsFrom (binaural_relay_);
 }
 
 ParameterAttachments::ParameterAttachments (ParameterRelay & parameter_relay,
@@ -23,6 +24,8 @@ ParameterAttachments::ParameterAttachments (ParameterRelay & parameter_relay,
     , filter_size_high_attachment_ (
           *parameter_tree.getParameter (ParameterTree::kFilterSizeHighParameterId),
           parameter_relay.filter_size_high_relay_)
+    , binaural_attachment_ (*parameter_tree.getParameter (ParameterTree::kBinauralParameterId),
+                            parameter_relay.binaural_relay_)
 
 {
 }

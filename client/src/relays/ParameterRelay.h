@@ -26,6 +26,8 @@ private:
                                                  ParameterTree::kFilterSizeLowParameterId};
     juce::WebSliderRelay filter_size_high_relay_ {web_browser_component_,
                                                   ParameterTree::kFilterSizeHighParameterId};
+    juce::WebSliderRelay binaural_relay_ {web_browser_component_,
+                                          ParameterTree::kBinauralParameterId};
 };
 
 /**
@@ -43,4 +45,5 @@ private:
     juce::WebSliderParameterAttachment input_gain_attachment_;
     juce::WebSliderParameterAttachment filter_size_low_attachment_;
     juce::WebSliderParameterAttachment filter_size_high_attachment_;
+    juce::WebSliderParameterAttachment binaural_attachment_;
 };
