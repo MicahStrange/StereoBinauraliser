@@ -26,6 +26,7 @@ void SofaStereoRenderer::prepare (const juce::dsp::ProcessSpec & spec)
     for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
     {
         sofa_renderers_ [buffer_index].prepare (spec);
+        sofa_renderers_ [buffer_index].SetBufferSize (sofa_filter_.GetFilterLength ());
         sofa_renderers_ [buffer_index].SetFilter (hrir_buffers_ [buffer_index],
                                                   left_delays_ [buffer_index],
                                                   right_delays_ [buffer_index],
@@ -35,34 +36,34 @@ void SofaStereoRenderer::prepare (const juce::dsp::ProcessSpec & spec)
     renderer_input_buffer_.setSize (2, (int) spec.maximumBlockSize);
     renderer_output_buffer_.setSize (2, (int) spec.maximumBlockSize);
 }
-void SofaStereoRenderer::process (
-    const juce::dsp::ProcessContextNonReplacing<float> & processContext)
-{
-    auto input_block = processContext.getInputBlock ();
-    auto output_block = processContext.getOutputBlock ();
-
-    jassert (input_block.getNumChannels () == 2);
-    jassert (output_block.getNumChannels () == 2);
-
-    juce::dsp::AudioBlock<float> renderer_input_block {renderer_input_buffer_};
-    renderer_input_block = renderer_input_block.getSubBlock (0, input_block.getNumSamples ());
-
-    juce::dsp::AudioBlock<float> renderer_output_block {renderer_output_buffer_};
-    renderer_output_block = renderer_output_block.getSubBlock (0, output_block.getNumSamples ());
-
-    for (auto renderer_index = 0; renderer_index < sofa_renderers_.size (); renderer_index++)
-    {
-        renderer_input_block.clear ();
-
-        renderer_input_block.add (input_block);
-
-        juce::dsp::ProcessContextNonReplacing<float> renderer_context {renderer_input_block,
-                                                                       renderer_output_block};
-        sofa_renderers_ [renderer_index].process (renderer_context);
-
-        output_block.add (renderer_output_block);
-    }
-}
+// void SofaStereoRenderer::process (
+//     const juce::dsp::ProcessContextNonReplacing<float> & processContext)
+//{
+//     auto input_block = processContext.getInputBlock ();
+//     auto output_block = processContext.getOutputBlock ();
+//
+//     jassert (input_block.getNumChannels () == 2);
+//     jassert (output_block.getNumChannels () == 2);
+//
+//     juce::dsp::AudioBlock<float> renderer_input_block {renderer_input_buffer_};
+//     renderer_input_block = renderer_input_block.getSubBlock (0, input_block.getNumSamples ());
+//
+//     juce::dsp::AudioBlock<float> renderer_output_block {renderer_output_buffer_};
+//     renderer_output_block = renderer_output_block.getSubBlock (0, output_block.getNumSamples ());
+//
+//     for (auto renderer_index = 0; renderer_index < sofa_renderers_.size (); renderer_index++)
+//     {
+//         renderer_input_block.clear ();
+//
+//         renderer_input_block.add (input_block);
+//
+//         juce::dsp::ProcessContextNonReplacing<float> renderer_context {renderer_input_block,
+//                                                                        renderer_output_block};
+//         sofa_renderers_ [renderer_index].process (renderer_context);
+//
+//         output_block.add (renderer_output_block);
+//     }
+// }
 
 void SofaStereoRenderer::reset ()
 {
@@ -80,6 +81,25 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
 
     if (*parameter_tree_.binaural_parameter > 0.5)
         return;
+
+    for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
+    {
+        auto width = buffer_index == 0 ? *parameter_tree_.speaker_width_parameter
+                                       : -*parameter_tree_.speaker_width_parameter;
+        auto azimuth = *parameter_tree_.speaker_position_parameter + width / 2.f;
+        SofaFilter::SphericalCoordinates coords {.azimuth_degrees = azimuth,
+                                                 .elevation_degrees = 0.f};
+        //        hrir_buffers_ [buffer_index].setSize (2, sofa_filter_.GetFilterLength ());
+        sofa_filter_.GetFilterForSphericalCoordinates (hrir_buffers_ [buffer_index],
+                                                       left_delays_ [buffer_index],
+                                                       right_delays_ [buffer_index],
+                                                       coords);
+
+        sofa_renderers_ [buffer_index].SetFilter (hrir_buffers_ [buffer_index],
+                                                  left_delays_ [buffer_index],
+                                                  right_delays_ [buffer_index],
+                                                  sample_rate_);
+    }
 
     juce::dsp::AudioBlock<float> renderer_input_block {renderer_input_buffer_};
     renderer_input_block = renderer_input_block.getSubBlock (0, input_block.getNumSamples ());

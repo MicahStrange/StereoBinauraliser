@@ -19,6 +19,8 @@ public:
     void process (const juce::dsp::ProcessContextNonReplacing<float> & processContext);
     void reset ();
 
+    void SetBufferSize (const int filter_length);
+
 private:
     static constexpr int kLeftChannel = 0;
     static constexpr int kRightChannel = 1;
@@ -32,4 +34,6 @@ private:
     std::array<SofaDelayLine, 2> delay_lines_;
     float left_delay_;
     float right_delay_;
+
+    juce::AudioBuffer<float> hrir_buffer_;
 };

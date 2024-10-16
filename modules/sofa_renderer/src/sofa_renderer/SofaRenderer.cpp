@@ -8,6 +8,8 @@ void SofaRenderer::prepare (const juce::dsp::ProcessSpec & spec)
     mono_spec.numChannels = 1;
     for (auto & delay_line : delay_lines_)
         delay_line.prepare (mono_spec);
+
+    hrir_buffer_.setSize (spec.numChannels, 44100);
 }
 
 void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
@@ -17,10 +19,11 @@ void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
 {
     left_delay_ = left_delay;
     right_delay_ = right_delay;
-    juce::AudioBuffer<float> hrir_buffer {static_cast<int> (hrir.getNumChannels ()),
-                                          static_cast<int> (hrir.getNumSamples ())};
-    hrir.copyTo (hrir_buffer);
-    buffer_transfer_.set (BufferWithSampleRate {std::move (hrir_buffer), sample_rate});
+    //    juce::AudioBuffer<float> hrir_buffer {static_cast<int> (hrir.getNumChannels ()),
+    //                                          static_cast<int> (hrir.getNumSamples ())};
+    hrir_buffer_.clear ();
+    hrir.copyTo (hrir_buffer_);
+    buffer_transfer_.set (BufferWithSampleRate {std::move (hrir_buffer_), sample_rate});
 
     auto left_delay_samples = juce::roundToInt (left_delay_ * sample_rate_);
     auto right_delay_samples = juce::roundToInt (right_delay_ * sample_rate_);
@@ -76,4 +79,10 @@ void SofaRenderer::reset ()
     convolver_.reset ();
     for (auto & delay_line : delay_lines_)
         delay_line.reset ();
+}
+
+void SofaRenderer::SetBufferSize (const int filter_length)
+{
+    hrir_buffer_.setSize (2, filter_length);
+    hrir_buffer_.clear ();
 }

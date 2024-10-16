@@ -28,6 +28,10 @@ private:
                                                   ParameterTree::kFilterSizeHighParameterId};
     juce::WebSliderRelay binaural_relay_ {web_browser_component_,
                                           ParameterTree::kBinauralParameterId};
+    juce::WebSliderRelay speaker_position_relay_ {web_browser_component_,
+                                                  ParameterTree::kSpeakerPositionParameterId};
+    juce::WebSliderRelay speaker_width_relay_ {web_browser_component_,
+                                               ParameterTree::kSpeakerWidthParameterId};
 };
 
 /**
@@ -46,4 +50,6 @@ private:
     juce::WebSliderParameterAttachment filter_size_low_attachment_;
     juce::WebSliderParameterAttachment filter_size_high_attachment_;
     juce::WebSliderParameterAttachment binaural_attachment_;
+    juce::WebSliderParameterAttachment speaker_position_attachment_;
+    juce::WebSliderParameterAttachment speaker_width_attachment_;
 };
