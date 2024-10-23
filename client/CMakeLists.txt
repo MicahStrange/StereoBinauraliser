@@ -48,8 +48,11 @@ target_link_libraries(
         ${BINARY}
         PRIVATE ${LINK_JUCE} ${LINK_COMMON}
         PUBLIC ${MODULE_LINK_CONF})
+#
+#target_compile_options(${BINARY} INTERFACE -Wall -Wextra -Werror)
 
-target_compile_options(${BINARY} INTERFACE -Wall -Wextra -Werror)
+
+target_compile_options(${BINARY} INTERFACE -Wall -Wextra)
 
 if (NOT DEV_LOCALHOST)
     get_target_property(ACTIVE_TARGETS ${BINARY} JUCE_ACTIVE_PLUGIN_TARGETS)

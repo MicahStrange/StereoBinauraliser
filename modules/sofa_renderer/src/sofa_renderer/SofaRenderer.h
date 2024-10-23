@@ -4,6 +4,7 @@
 
 #include <juce_core/juce_core.h>
 #include <juce_dsp/juce_dsp.h>
+#include <zones_convolver/zones_convolver.h>
 
 class SofaRenderer
 {
@@ -28,7 +29,9 @@ private:
     float sample_rate_;
 
     BufferTransfer buffer_transfer_;
-    juce::dsp::Convolution convolver_;
+    //    juce::dsp::Convolution convolver_;
+    juce::ThreadPool thread_pool_;
+    zones::ConvolutionEngine convolver_ {thread_pool_};
 
     using SofaDelayLine = juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::None>;
     std::array<SofaDelayLine, 2> delay_lines_;

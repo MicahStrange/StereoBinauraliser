@@ -5,13 +5,26 @@ enable_testing()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 
 include(module_common.cmake)
 
 set(CATCH_INSTALL_DOCS OFF)
 set(CATCH_INSTALL_EXTRAS OFF)
 set(BUILD_TESTING OFF)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
 add_subdirectory(JUCE)
+
+if (CMAKE_CXX_FLAGS MATCHES "-Werror")
+    message(STATUS "Werror is enabled")
+else ()
+    message(STATUS "Werror is NOT enabled")
+endif ()
+
+
+add_subdirectory(zones_convolver)
 
 # Set path for mysofa installation
 set(mysofa_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libmysofa/libmysofa_install")
@@ -28,7 +41,7 @@ add_library(common INTERFACE
 )
 
 # Link mysofa library
-target_link_libraries(common INTERFACE mysofa::mysofa-static)
+target_link_libraries(common INTERFACE mysofa::mysofa-static zones_convolver)
 link_libraries(common)
 
 add_subdirectory(client)

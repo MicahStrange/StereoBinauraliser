@@ -43,11 +43,16 @@ void SofaRenderer::process (const juce::dsp::ProcessContextNonReplacing<float> &
     buffer_transfer_.get (
         [&] (BufferWithSampleRate & transfer_buffer)
         {
-            convolver_.loadImpulseResponse (std::move (transfer_buffer.buffer),
-                                            transfer_buffer.sampleRate,
-                                            juce::dsp::Convolution::Stereo::yes,
-                                            juce::dsp::Convolution::Trim::no,
-                                            juce::dsp::Convolution::Normalise::no);
+            //            convolver_.loadImpulseResponse (std::move (transfer_buffer.buffer),
+            //                                            transfer_buffer.sampleRate,
+            //                                            juce::dsp::Convolution::Stereo::yes,
+            //                                            juce::dsp::Convolution::Trim::no,
+            //                                            juce::dsp::Convolution::Normalise::no);
+            convolver_.LoadIR (transfer_buffer.buffer,
+                               zones::Convolver::ConvolverSpec {
+                                   .fade_strategy = zones::Convolver::FadeStrategy::kCrossfade,
+                                   .input_routing = {0, 1},
+                                   .output_routing = {0, 1}});
         });
 
     auto input_block = processContext.getInputBlock ();
@@ -59,10 +64,14 @@ void SofaRenderer::process (const juce::dsp::ProcessContextNonReplacing<float> &
 
     auto output_block = processContext.getOutputBlock ();
 
-    juce::dsp::ProcessContextNonReplacing<float> doubled_process_context {duplicated_input_block,
-                                                                          output_block};
+    //    juce::dsp::ProcessContextNonReplacing<float> doubled_process_context
+    //    {duplicated_input_block,
+    //                                                                          output_block};
 
-    convolver_.process (doubled_process_context);
+    output_block.copyFrom (duplicated_input_block);
+    juce::dsp::ProcessContextReplacing<float> process_context {output_block};
+
+    convolver_.process (process_context);
 
     auto left_block = output_block.getSingleChannelBlock (kLeftChannel);
     auto right_block = output_block.getSingleChannelBlock (kRightChannel);
