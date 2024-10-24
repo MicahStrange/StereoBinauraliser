@@ -9,7 +9,7 @@
 class SofaRenderer
 {
 public:
-    SofaRenderer () = default;
+    SofaRenderer ();
 
     void SetFilter (juce::dsp::AudioBlock<float> hrir,
                     float left_delay,

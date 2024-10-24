@@ -1,5 +1,9 @@
 #include "SofaRenderer.h"
 
+SofaRenderer::SofaRenderer ()
+{
+}
+
 void SofaRenderer::prepare (const juce::dsp::ProcessSpec & spec)
 {
     sample_rate_ = spec.sampleRate;
@@ -10,6 +14,12 @@ void SofaRenderer::prepare (const juce::dsp::ProcessSpec & spec)
         delay_line.prepare (mono_spec);
 
     hrir_buffer_.setSize (spec.numChannels, 44100);
+
+    //    convolver_.LoadIR (hrir_buffer_,
+    //                       zones::Convolver::ConvolverSpec {
+    //                           .input_routing = {0, 1},
+    //                           .output_routing = {0, 1},
+    //                           .fade_strategy = zones::Convolver::FadeStrategy::kCrossfade});
 }
 
 void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
@@ -19,8 +29,9 @@ void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
 {
     left_delay_ = left_delay;
     right_delay_ = right_delay;
-    //    juce::AudioBuffer<float> hrir_buffer {static_cast<int> (hrir.getNumChannels ()),
-    //                                          static_cast<int> (hrir.getNumSamples ())};
+    hrir_buffer_.setSize (static_cast<int> (hrir.getNumChannels ()),
+                          static_cast<int> (hrir.getNumSamples ()));
+
     hrir_buffer_.clear ();
     hrir.copyTo (hrir_buffer_);
     buffer_transfer_.set (BufferWithSampleRate {std::move (hrir_buffer_), sample_rate});
@@ -50,9 +61,10 @@ void SofaRenderer::process (const juce::dsp::ProcessContextNonReplacing<float> &
             //                                            juce::dsp::Convolution::Normalise::no);
             convolver_.LoadIR (transfer_buffer.buffer,
                                zones::Convolver::ConvolverSpec {
-                                   .fade_strategy = zones::Convolver::FadeStrategy::kCrossfade,
+
                                    .input_routing = {0, 1},
-                                   .output_routing = {0, 1}});
+                                   .output_routing = {0, 1},
+                                   .fade_strategy = zones::Convolver::FadeStrategy::kCrossfade});
         });
 
     auto input_block = processContext.getInputBlock ();
