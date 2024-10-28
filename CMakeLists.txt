@@ -34,8 +34,6 @@ find_package(mysofa CONFIG REQUIRED)
 
 # Add common library
 add_library(common INTERFACE
-        modules/sofa_renderer/src/sofa_renderer/SofaDodecRenderer.cpp
-        modules/sofa_renderer/src/sofa_renderer/SofaDodecRenderer.h
         modules/sofa_renderer/src/sofa_renderer/SofaFilter.h
         modules/sofa_renderer/src/sofa_renderer/SofaFilter.cpp
 )

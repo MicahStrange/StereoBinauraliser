@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BufferTransfer.h"
+#include "TimeVaryingConvolver.h"
 
 #include <juce_core/juce_core.h>
 #include <juce_dsp/juce_dsp.h>
@@ -16,11 +17,10 @@ public:
                     float right_delay,
                     float sample_rate);
 
-    void prepare (const juce::dsp::ProcessSpec & spec);
-    void process (const juce::dsp::ProcessContextNonReplacing<float> & processContext);
+    void Prepare (const juce::dsp::ProcessSpec & spec, const int max_ir_num_samples);
+    void Process (const juce::dsp::ProcessContextNonReplacing<float> & processContext,
+                  const std::optional<juce::dsp::AudioBlock<float>> & ir);
     void reset ();
-
-    void SetBufferSize (const int filter_length);
 
 private:
     static constexpr int kLeftChannel = 0;
@@ -29,9 +29,10 @@ private:
     float sample_rate_;
 
     BufferTransfer buffer_transfer_;
-    //    juce::dsp::Convolution convolver_;
+
     juce::ThreadPool thread_pool_;
-    zones::ConvolutionEngine convolver_ {thread_pool_};
+    //    zones::ConvolutionEngine convolver_ {thread_pool_};
+    TimeVaryingConvolver convolver_;
 
     using SofaDelayLine = juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::None>;
     std::array<SofaDelayLine, 2> delay_lines_;

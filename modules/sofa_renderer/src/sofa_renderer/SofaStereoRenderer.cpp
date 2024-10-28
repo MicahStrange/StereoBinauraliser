@@ -25,12 +25,11 @@ void SofaStereoRenderer::prepare (const juce::dsp::ProcessSpec & spec)
     sample_rate_ = spec.sampleRate;
     for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
     {
-        sofa_renderers_ [buffer_index].prepare (spec);
-        sofa_renderers_ [buffer_index].SetBufferSize (sofa_filter_.GetFilterLength ());
-        sofa_renderers_ [buffer_index].SetFilter (hrir_buffers_ [buffer_index],
-                                                  left_delays_ [buffer_index],
-                                                  right_delays_ [buffer_index],
-                                                  sample_rate_);
+        sofa_renderers_ [buffer_index].Prepare (spec, sofa_filter_.GetFilterLength ());
+        //        sofa_renderers_ [buffer_index].SetFilter (hrir_buffers_ [buffer_index],
+        //                                                  left_delays_ [buffer_index],
+        //                                                  right_delays_ [buffer_index],
+        //                                                  sample_rate_);
     }
 
     renderer_input_buffer_.setSize (2, (int) spec.maximumBlockSize);
@@ -112,11 +111,12 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
     renderer_input_block.add (input_block).multiplyBy (0.5f);
     output_block.clear ();
 
+    jassert (sofa_renderers_.size () == hrir_buffers_.size ());
     for (auto renderer_index = 0; renderer_index < sofa_renderers_.size (); renderer_index++)
     {
         juce::dsp::ProcessContextNonReplacing<float> renderer_context {
             renderer_input_block.getSingleChannelBlock (renderer_index), renderer_output_block};
-        sofa_renderers_ [renderer_index].process (renderer_context);
+        sofa_renderers_ [renderer_index].Process (renderer_context, hrir_buffers_ [renderer_index]);
 
         output_block.add (renderer_output_block);
     }
