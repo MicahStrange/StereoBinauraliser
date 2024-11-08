@@ -41,7 +41,7 @@ void TimeVaryingConvolver::Prepare (const juce::dsp::ProcessSpec & spec,
 
     Reset ();
 
-    static constexpr auto kSmoothingTime = 8.0f;
+    static constexpr auto kSmoothingTime = 0.1f;
     smoothed_value_in_.reset (spec.sampleRate, kSmoothingTime);
     smoothed_value_out_.reset (spec.sampleRate, kSmoothingTime);
 }
@@ -194,17 +194,19 @@ void TimeVaryingConvolver::Process (const juce::dsp::ProcessContextReplacing<flo
             // move fade to main
             // maybe cant assign this way??
             main_filter_partitions_ = fade_filter_partitions_;
-            ClearFilterPartition (fade_filter_partitions_);
+            //            ClearFilterPartition (fade_filter_partitions_);
             fade_filled_ = false;
             main_filled_ = true;
+            ResetFade ();
 
             // move pending to fade
             if (pending_filled_)
             {
                 fade_filter_partitions_ = pending_filter_partitions_;
-                ClearFilterPartition (pending_filter_partitions_);
+                //                ClearFilterPartition (pending_filter_partitions_);
                 pending_filled_ = false;
                 fade_filled_ = true;
+                BeginFade ();
             }
         }
     }

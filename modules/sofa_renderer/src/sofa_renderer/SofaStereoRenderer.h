@@ -18,6 +18,7 @@ public:
     void process (const juce::dsp::ProcessContextReplacing<float> & replacing) override;
 
 private:
+    bool ParamDiff (ParameterTree & parameter_tree);
     float sample_rate_;
 
     std::array<SofaRenderer, 2> sofa_renderers_;
@@ -40,4 +41,12 @@ private:
     };
 
     ParameterTree parameter_tree_;
+
+    struct SavedParams
+    {
+        float speaker_position_parameter;
+        float speaker_width_parameter;
+    };
+
+    SavedParams saved_params_;
 };

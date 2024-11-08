@@ -85,7 +85,7 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
     {
         auto width = buffer_index == 0 ? *parameter_tree_.speaker_width_parameter
                                        : -*parameter_tree_.speaker_width_parameter;
-        auto azimuth = *parameter_tree_.speaker_position_parameter + width / 2.f;
+        auto azimuth = -1.f * (*parameter_tree_.speaker_position_parameter + width / 2.f);
         SofaFilter::SphericalCoordinates coords {.azimuth_degrees = azimuth,
                                                  .elevation_degrees = 0.f};
         //        hrir_buffers_ [buffer_index].setSize (2, sofa_filter_.GetFilterLength ());
@@ -116,8 +116,28 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
     {
         juce::dsp::ProcessContextNonReplacing<float> renderer_context {
             renderer_input_block.getSingleChannelBlock (renderer_index), renderer_output_block};
-        sofa_renderers_ [renderer_index].Process (renderer_context, hrir_buffers_ [renderer_index]);
+        if (ParamDiff (parameter_tree_))
+        {
+            sofa_renderers_ [renderer_index].Process (renderer_context,
+                                                      hrir_buffers_ [renderer_index]);
+        }
+        else
+        {
+            sofa_renderers_ [renderer_index].Process (renderer_context, std::nullopt);
+        }
 
         output_block.add (renderer_output_block);
     }
+}
+bool SofaStereoRenderer::ParamDiff (ParameterTree & parameter_tree)
+{
+    bool result = true;
+    if (*parameter_tree.speaker_width_parameter == saved_params_.speaker_width_parameter &&
+        *parameter_tree.speaker_position_parameter == saved_params_.speaker_position_parameter)
+        result = false;
+
+    saved_params_.speaker_position_parameter = *parameter_tree.speaker_position_parameter;
+    saved_params_.speaker_width_parameter = *parameter_tree.speaker_width_parameter;
+
+    return result;
 }
