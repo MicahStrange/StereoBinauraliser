@@ -97,90 +97,91 @@ const TVKnobBase = ({
 
         <div
             className={cn(
-                "w-fit flex flex-col justify-center items-center text-xs select-none"
+                "w-full h-full flex flex-col justify-center items-center text-xs select-none"
             )}
         >
-            <KnobHeadlessLabel id={labelId} className="text-primary mb-2">
-                {name}
-            </KnobHeadlessLabel>
-            <div>
-                <div>
-                    {posEnabled ? (
-                        <KnobHeadless
-                            id={PosknobId}
-                            aria-labelledby={labelId}
-                            className="outline-none w-fit"
-                            valueMin={posValueMin}
-                            valueMax={posValueMax}
-                            valueRaw={valuesRaw[0]}
-                            valueRawRoundFn={valueRawRoundFn}
-                            valueRawDisplayFn={valueRawDisplayFn}
-                            dragSensitivity={dragSensitivity}
-                            orientation={orientation}
-                            mapTo01={mapTo01}
-                            mapFrom01={mapFrom01}
-                            onValueRawChange={setPosValueRaw}
-                            onMouseDown={onMouseDown}
-                            onMouseUp={() => {
-                                onRawValueCommit(valuesRaw[0]);
-                            }}
-                            onClick={(e) => {
-                                if (e.altKey) {
-                                    onResetToDefault();
-                                }
-                            }}
-                            {...PosKeyboardControlHandlers}
-                        >
-                            <TVKnobBaseThumb
-                                posValue01={values01[0]}
-                                widthValue01={values01[1]}
-                                midpoint={midpoint}
-                                showMidpointIndicator={showMidpointIndicator}
-                                trackFromMidpoint={trackFromMidpoint}
-                            />
-                        </KnobHeadless>) : (
+            {/*<KnobHeadlessLabel id={labelId} className="text-primary mb-2">*/}
+            {/*    {name}*/}
+            {/*</KnobHeadlessLabel>*/}
 
-                        <KnobHeadless
-                            id={WidthknobId}
-                            aria-labelledby={labelId}
-                            className="outline-none w-fit"
-                            valueMin={widthValueMin}
-                            valueMax={widthValueMax}
-                            valueRaw={valuesRaw[1]}
-                            valueRawRoundFn={valueRawRoundFn}
-                            valueRawDisplayFn={valueRawDisplayFn}
-                            dragSensitivity={dragSensitivity}
-                            orientation={orientation}
-                            mapTo01={mapTo01}
-                            mapFrom01={mapFrom01}
-                            onValueRawChange={setPosValueRaw}
-                            onMouseDown={onMouseDown}
-                            onMouseUp={() => {
-                                onRawValueCommit(valuesRaw[1]);
-                            }}
-                            onClick={(e) => {
-                                if (e.altKey) {
-                                    onResetToDefault();
-                                }
-                            }}
-                            {...PosKeyboardControlHandlers} >
-                            <TVKnobBaseThumb
-                                posValue01={values01[0]}
-                                widthValue01={values01[1]}
-                                midpoint={midpoint}
-                                showMidpointIndicator={showMidpointIndicator}
-                                trackFromMidpoint={trackFromMidpoint}
-                            />
-                        </KnobHeadless>
+            <div className={" mt-0.5 text-xl h-[50%] w-full h-full flex items-center justify-center"}>
+                {posEnabled ? (
+                    <KnobHeadless
+                        id={PosknobId}
+                        aria-labelledby={labelId}
+                        className="outline-none w-fit"
+                        valueMin={posValueMin}
+                        valueMax={posValueMax}
+                        valueRaw={valuesRaw[0]}
+                        valueRawRoundFn={valueRawRoundFn}
+                        valueRawDisplayFn={valueRawDisplayFn}
+                        dragSensitivity={dragSensitivity}
+                        orientation={orientation}
+                        mapTo01={mapTo01}
+                        mapFrom01={mapFrom01}
+                        onValueRawChange={setPosValueRaw}
+                        onMouseDown={onMouseDown}
+                        onMouseUp={() => {
+                            onRawValueCommit(valuesRaw[0]);
+                        }}
+                        onClick={(e) => {
+                            if (e.altKey) {
+                                onResetToDefault();
+                            }
+                        }}
+                        {...PosKeyboardControlHandlers}
+                    >
+                        <TVKnobBaseThumb
+                            posValue01={values01[0]}
+                            widthValue01={values01[1]}
+                            midpoint={midpoint}
+                            showMidpointIndicator={showMidpointIndicator}
+                            trackFromMidpoint={trackFromMidpoint}
+                        />
+                    </KnobHeadless>) : (
 
-                    )}
-                </div>
+                    <KnobHeadless
+                        id={WidthknobId}
+                        aria-labelledby={labelId}
+                        className="outline-none w-fit"
+                        valueMin={widthValueMin}
+                        valueMax={widthValueMax}
+                        valueRaw={valuesRaw[1]}
+                        valueRawRoundFn={valueRawRoundFn}
+                        valueRawDisplayFn={valueRawDisplayFn}
+                        dragSensitivity={dragSensitivity}
+                        orientation={orientation}
+                        mapTo01={mapTo01}
+                        mapFrom01={mapFrom01}
+                        onValueRawChange={setPosValueRaw}
+                        onMouseDown={onMouseDown}
+                        onMouseUp={() => {
+                            onRawValueCommit(valuesRaw[1]);
+                        }}
+                        onClick={(e) => {
+                            if (e.altKey) {
+                                onResetToDefault();
+                            }
+                        }}
+                        {...PosKeyboardControlHandlers} >
+                        <TVKnobBaseThumb
+                            posValue01={values01[0]}
+                            widthValue01={values01[1]}
+                            midpoint={midpoint}
+                            showMidpointIndicator={showMidpointIndicator}
+                            trackFromMidpoint={trackFromMidpoint}
+                        />
+                    </KnobHeadless>
+
+                )}
             </div>
-            <KnobHeadlessOutput htmlFor={PosknobId} className="mt-0.5">
-                {valueRawDisplayFn(valuesRaw[0])}
+            <KnobHeadlessOutput htmlFor={PosknobId}
+                                className=" mt-0.5 text-xl h-[5%] flex items-center justify-center">
+                Midpoint: {valueRawDisplayFn(valuesRaw[0])}
             </KnobHeadlessOutput>
-            <KnobHeadlessOutput htmlFor={WidthknobId} className="mt-0.5">
-                {valueRawDisplayFn(valuesRaw[1])}
+            <KnobHeadlessOutput htmlFor={WidthknobId}
+                                className="mt-0.5 text-xl h-[5%] flex items-center justify-center">
+                Width: {valueRawDisplayFn(valuesRaw[1])}
             </KnobHeadlessOutput>
 
         </div>

@@ -65,8 +65,15 @@ const TVKnob: FC<{
     };
 
     const setValueRaw = (valueRaw: number) => {
+
         if (posEnabled) {
-            posHandleChange(posToNormalised(valueRaw));
+            let value = valueRaw
+            if (value === 360) {
+                value = 0; // Wrap around when it hits 360
+            } else if (value === 0) {
+                value = 360; // Wrap around when it hits 0
+            }
+            posHandleChange(posToNormalised(value));
         } else {
             widthHandleChange(widthToNormalised(valueRaw));
         }
@@ -74,7 +81,14 @@ const TVKnob: FC<{
     };
 
     const rawValueCommit = (valueRaw: number) => {
+
         if (posEnabled) {
+            let value = valueRaw
+            if (value === 360) {
+                value = 0; // Wrap around when it hits 360
+            } else if (value === 0) {
+                value = 360; // Wrap around when it hits 0
+            }
             posChangeCommitted(posToNormalised(valueRaw));
         } else {
             widthChangeCommitted(widthToNormalised(valueRaw));
@@ -107,7 +121,7 @@ const TVKnob: FC<{
 
 
     return (
-        <div>
+        <div className={"w-full  h-full"}>
             <button onClick={toggleMode}> {posEnabled ? "PositionEnabled" : "WidthEnabled"}</button>
             <TVKnobBase
                 valueMin={0} valueMax={0} onRawValueCommit={rawValueCommit}
@@ -134,10 +148,10 @@ const TVKnob: FC<{
                 {...{
                     [controlParameterIndexAnnotation]: posProperties.parameterIndex,
                 }}            />
-            <h1>{posValueScaled}</h1>
-            <h1>{widthValueScaled}</h1>
-            <h1>{posProperties.defaultValue}</h1>
-            <h1>{widthProperties.defaultValue}</h1>
+            {/*<h1>{posValueScaled}</h1>*/}
+            {/*<h1>{widthValueScaled}</h1>*/}
+            {/*<h1>{posProperties.defaultValue}</h1>*/}
+            {/*<h1>{widthProperties.defaultValue}</h1>*/}
         </div>
     );
 };
