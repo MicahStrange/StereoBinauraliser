@@ -6,6 +6,7 @@ import {controlParameterIndexAnnotation} from "@/hooks/use_control_parameter_ind
 import {useSlider} from "@/hooks/use_slider";
 import {TVKnobBase} from "@/components/tv_knob/tv_knob_base";
 import {Button} from "@/components/ui/button";
+import {ToggleButton} from "@/components/toggle_button/ToggleButton";
 
 const mapTo01Skewed = (
     x: number,
@@ -27,49 +28,6 @@ const mapFrom01Skewed = (
     return mapFrom01Linear(skewedValue, min, max);
 };
 
-interface ToggleButtonProps {
-    onClick: () => void;
-    leftText: string;
-    rightText: string;
-}
-
-const ToggleButton: FC<ToggleButtonProps>
-    = ({onClick, leftText, rightText}) => {
-    const [active, setActive] = useState(true);
-
-    const handleToggle = () => {
-        setActive(prevState => !prevState);
-        onClick();
-    };
-
-    return (
-        <div>
-            <button onClick={handleToggle} className="ToggleButton">
-                <div className={"w-full h-full flex flex-row fl "}>
-                    <div className={"flex-1 "} style={{
-                        background: active ? 'var(--highlight)' : "none",
-                        fontWeight: active ? 'bold' : 'normal',
-                        color: active ? 'var(--text)' : 'var(--text-disabled)',
-                        borderRadius: 4,
-                    }}>
-                        {leftText}
-                    </div>
-                    <div className={"flex-1 "} style={{
-                        background: !active ? 'var(--highlight)' : "none",
-                        fontWeight: !active ? 'bold' : 'normal',
-                        color: !active ? 'var(--text)' : 'var(--text-disabled)',
-                        borderRadius: 4,
-                    }}>
-                        {rightText}
-                    </div>
-                </div>
-            </button>
-
-
-        </div>
-    )
-        ;
-}
 
 const TVKnob: FC<{
     posIdentifier: string;

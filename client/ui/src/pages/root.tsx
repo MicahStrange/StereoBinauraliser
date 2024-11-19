@@ -5,6 +5,7 @@ import {Parameters} from "@/lib/parameters";
 import {useControlParameterIndexUpdater} from "@/hooks/use_control_parameter_index_updater";
 import {TVKnob} from "@/components/tv_knob";
 import {parameters} from "@storybook/addon-interactions/preview";
+import {Toggle} from "@/components/toggle_button/index";
 
 const Root = () => {
 
@@ -15,12 +16,12 @@ const Root = () => {
         >
             <div className="w-full ml-0.5">
                 <Knob identifier={Parameters.Input} showMidpointIndicator={false}/>
-                {/*<Knob identifier={Parameters.Binaural}/>*/}
+                <Toggle identifier={Parameters.Binaural}/>
                 {/*<Knob identifier={Parameters.SpeakerPosition}/>*/}
                 {/*<Knob identifier={Parameters.SpeakerWidth}/>*/}
 
             </div>
-            <div className="w-full">
+            <div className="w-full ml-0.5">
                 <TVKnob posIdentifier={Parameters.SpeakerPosition} widthIdentifier={Parameters.SpeakerWidth}/>
             </div>
         </div>

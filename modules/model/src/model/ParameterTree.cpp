@@ -48,7 +48,7 @@ ParameterTree::CreateParameterTree (juce::AudioProcessorValueTreeState::Paramete
                 juce::ParameterID {kBinauralParameterId, 1},
                 "Binaural",
                 ParameterUtils::WithSkewedCentre (juce::NormalisableRange<float> (0, 1.f), 0.5f),
-                1.f,
+                0.f,
                 juce::AudioParameterFloatAttributes ()),
             layout),
         .speaker_position_parameter = ParameterUtils::BindLayoutParameter (
