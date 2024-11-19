@@ -5,6 +5,7 @@ import {KnobBase} from "@/components/knob/knob_base";
 import {controlParameterIndexAnnotation} from "@/hooks/use_control_parameter_index_updater";
 import {useSlider} from "@/hooks/use_slider";
 import {TVKnobBase} from "@/components/tv_knob/tv_knob_base";
+import {Button} from "@/components/ui/button";
 
 const mapTo01Skewed = (
     x: number,
@@ -25,6 +26,50 @@ const mapFrom01Skewed = (
     let skewedValue = Math.pow(x, 1 / skew);
     return mapFrom01Linear(skewedValue, min, max);
 };
+
+interface ToggleButtonProps {
+    onClick: () => void;
+    leftText: string;
+    rightText: string;
+}
+
+const ToggleButton: FC<ToggleButtonProps>
+    = ({onClick, leftText, rightText}) => {
+    const [active, setActive] = useState(true);
+
+    const handleToggle = () => {
+        setActive(prevState => !prevState);
+        onClick();
+    };
+
+    return (
+        <div>
+            <button onClick={handleToggle} className="ToggleButton">
+                <div className={"w-full h-full flex flex-row fl "}>
+                    <div className={"flex-1 "} style={{
+                        background: active ? 'var(--highlight)' : "none",
+                        fontWeight: active ? 'bold' : 'normal',
+                        color: active ? 'var(--text)' : 'var(--text-disabled)',
+                        borderRadius: 4,
+                    }}>
+                        {leftText}
+                    </div>
+                    <div className={"flex-1 "} style={{
+                        background: !active ? 'var(--highlight)' : "none",
+                        fontWeight: !active ? 'bold' : 'normal',
+                        color: !active ? 'var(--text)' : 'var(--text-disabled)',
+                        borderRadius: 4,
+                    }}>
+                        {rightText}
+                    </div>
+                </div>
+            </button>
+
+
+        </div>
+    )
+        ;
+}
 
 const TVKnob: FC<{
     posIdentifier: string;
@@ -122,7 +167,7 @@ const TVKnob: FC<{
 
     return (
         <div className={"w-full  h-full"}>
-            <button onClick={toggleMode}> {posEnabled ? "PositionEnabled" : "WidthEnabled"}</button>
+            <ToggleButton onClick={toggleMode} leftText={"Position"} rightText={"Width"}/>
             <TVKnobBase
                 valueMin={0} valueMax={0} onRawValueCommit={rawValueCommit}
                 posEnabled={posEnabled}
@@ -148,10 +193,6 @@ const TVKnob: FC<{
                 {...{
                     [controlParameterIndexAnnotation]: posProperties.parameterIndex,
                 }}            />
-            {/*<h1>{posValueScaled}</h1>*/}
-            {/*<h1>{widthValueScaled}</h1>*/}
-            {/*<h1>{posProperties.defaultValue}</h1>*/}
-            {/*<h1>{widthProperties.defaultValue}</h1>*/}
         </div>
     );
 };

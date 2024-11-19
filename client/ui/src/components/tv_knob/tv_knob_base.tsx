@@ -97,14 +97,14 @@ const TVKnobBase = ({
 
         <div
             className={cn(
-                "w-full h-full flex flex-col justify-center items-center text-xs select-none"
+                "w-full h-full flex flex-col"
             )}
         >
             {/*<KnobHeadlessLabel id={labelId} className="text-primary mb-2">*/}
             {/*    {name}*/}
             {/*</KnobHeadlessLabel>*/}
 
-            <div className={" mt-0.5 text-xl h-[50%] w-full h-full flex items-center justify-center"}>
+            <div className={" mt-0.5 text-xl h-[80%] w-full flex items-center justify-center"}>
                 {posEnabled ? (
                     <KnobHeadless
                         id={PosknobId}
@@ -176,11 +176,11 @@ const TVKnobBase = ({
                 )}
             </div>
             <KnobHeadlessOutput htmlFor={PosknobId}
-                                className=" mt-0.5 text-xl h-[5%] flex items-center justify-center">
+                                className=" mt-0.5 text-xl h-[10%] flex items-center justify-center">
                 Midpoint: {valueRawDisplayFn(valuesRaw[0])}
             </KnobHeadlessOutput>
             <KnobHeadlessOutput htmlFor={WidthknobId}
-                                className="mt-0.5 text-xl h-[5%] flex items-center justify-center">
+                                className="mt-0.5 text-xl h-[10%] flex items-center justify-center">
                 Width: {valueRawDisplayFn(valuesRaw[1])}
             </KnobHeadlessOutput>
 

@@ -4,11 +4,13 @@ import {FC} from "react";
 
 const angleMin = -180;
 const angleMax = 180;
+const innerRadius = 40;
+const outerRadius = 50;
 
-const arc_gen = arc();
+const arc_gen = arc().cornerRadius(0);
 const arc_style: DefaultArcObject = {
-    innerRadius: 110,
-    outerRadius: 120,
+    innerRadius: innerRadius,
+    outerRadius: outerRadius,
     startAngle: (-180 / 180) * Math.PI,
     endAngle: (180 / 180) * Math.PI,
 };
@@ -18,6 +20,13 @@ const track = arc_gen(arc_style)!;
 const midpoint_indicator = symbol()
     .type(symbolTriangle)
     .size(10 * 10);
+
+function getCoordinates(angle: number) {
+    return {
+        x: innerRadius * Math.cos((angle / 180) * Math.PI),
+        y: innerRadius * Math.sin((angle / 180) * Math.PI),
+    };
+}
 
 const TVKnobBaseThumb: FC<{
     posValue01: number;
@@ -51,42 +60,59 @@ const TVKnobBaseThumb: FC<{
     // })!;
 
     const track_fill = arc_gen({
-        innerRadius: 110,
-        outerRadius: 120,
+        innerRadius: innerRadius,
+        outerRadius: outerRadius,
         startAngle: (leftAngle / 180) * Math.PI,
         endAngle: (adjustedrightAngle / 180) * Math.PI,
     })!;
 
+    const left_point_fill = arc_gen({
+        innerRadius: innerRadius,
+        outerRadius: outerRadius,
+        startAngle: (leftAngle / 180) * Math.PI,
+        endAngle: ((leftAngle + 2) / 180) * Math.PI,
+    })!;
+    const right_point_fill = arc_gen({
+        innerRadius: innerRadius,
+        outerRadius: outerRadius,
+        startAngle: ((adjustedrightAngle - 2) / 180) * Math.PI,
+        endAngle: (adjustedrightAngle / 180) * Math.PI,
+    })!;
+
+    const drawTrackFill =
+        () => {
+            return (
+                <>
+
+                    {widthValue01 == 1 ? <path className="stroke-0 fill-primary" d={track}/> :
+                        <path className="stroke-0 fill-primary" d={track_fill}/>}
+                    <path className="stroke-0 fill-secondary"
+                          d={left_point_fill}/>
+                    <path className="stroke-0 fill-secondary"
+                          d={right_point_fill}/>
+                </>
+            );
+        }
+
+
     return (
-        <div className="relative w-full h-full">
+        <div className=" relative w-full h-full">
             <svg
-                className="w-full h-full relative"
-                viewBox="-120 -120 240 240"
-
-                style={{
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, 0%)",
-                }}
+                className="w-full h-full relative "
+                viewBox="-100 -100 100 100"
             >
-                {/*<path className="stroke-0 fill-background" d={track}/>*/}
-                {/*<path className="stroke-0 fill-primary" d={track_fill}/>*/}
-                <path className="stroke-0 fill-blue" d={track}/>
-
-                {widthValue01 == 1 ? <path className="stroke-0 fill-amber-50" d={track}/> :
-                    <path className="stroke-0 fill-amber-50" d={track_fill}/>}
+                <g transform="translate(-50, -50)">
+                    <path className="stroke-0 fill-ring" d={track}/>
+                    {drawTrackFill()}
+                </g>
 
             </svg>
-            {/*<h1 style={{color: 'green'}}>{leftValue}</h1>*/}
-            {/*<h1 style={{color: 'green'}}>{rightValue}</h1>*/}
-            {/*<h1 style={{color: 'green'}}>{midValue}</h1>*/}
-            {/*<h1 style={{color: 'white'}}>{leftAngle}</h1>*/}
-            {/*<h1 style={{color: 'white'}}>{rightAngle}</h1>*/}
-            {/*<h1 style={{color: 'white'}}>{adjustedrightAngle}</h1>*/}
-            {/*<h1 style={{color: 'green'}}>{midpointAngle}</h1>*/}
+
 
         </div>
     );
 };
 
-export {TVKnobBaseThumb};
+export {
+    TVKnobBaseThumb
+};

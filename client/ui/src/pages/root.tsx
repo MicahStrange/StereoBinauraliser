@@ -11,19 +11,16 @@ const Root = () => {
     useControlParameterIndexUpdater();
     return (
         <div
-            className="flex flex-col h-screen bg-background relative select-none"
-            data-theme="dark"
+            className="fill-background flex flex-col h-screen relative select-none"
         >
             <div className="w-full ml-0.5">
-                {/*<Knob identifier={Parameters.Input}/>*/}
-                {/*<Knob identifier={Parameters.FilterSizeLow}/>*/}
-                {/*<Knob identifier={Parameters.FilterSizeHigh}/>*/}
+                <Knob identifier={Parameters.Input} showMidpointIndicator={false}/>
                 {/*<Knob identifier={Parameters.Binaural}/>*/}
                 {/*<Knob identifier={Parameters.SpeakerPosition}/>*/}
                 {/*<Knob identifier={Parameters.SpeakerWidth}/>*/}
 
             </div>
-            <div className="w-full h-full content">
+            <div className="w-full">
                 <TVKnob posIdentifier={Parameters.SpeakerPosition} widthIdentifier={Parameters.SpeakerWidth}/>
             </div>
         </div>
