@@ -124,8 +124,10 @@ const TVKnob: FC<{
 
 
     return (
-        <div className={"w-full  h-full"}>
-            <ToggleButton onClick={toggleMode} leftText={"Position"} rightText={"Width"}/>
+        <div className={"w-full  h-full flex flex-col p-2 py-2 justify-between  mt-0.5"}>
+            <div className={"py-2"}>
+                <ToggleButton onClick={toggleMode} leftText={"Position"} rightText={"Width"}/>
+            </div>
             <TVKnobBase
                 valueMin={0} valueMax={0} onRawValueCommit={rawValueCommit}
                 posEnabled={posEnabled}

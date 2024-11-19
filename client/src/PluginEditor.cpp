@@ -84,7 +84,7 @@ PluginEditor::PluginEditor (PluginProcessor & p)
     juce::ignoreUnused (processorRef);
     asset_directory_ = GetAssetsDirectory ();
 
-    setSize (800, 800);
+    setSize (600, 600);
     setResizable (true, true);
 
 #if DEV_LOCALHOST

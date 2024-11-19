@@ -6,24 +6,28 @@ import {useControlParameterIndexUpdater} from "@/hooks/use_control_parameter_ind
 import {TVKnob} from "@/components/tv_knob";
 import {parameters} from "@storybook/addon-interactions/preview";
 import {Toggle} from "@/components/toggle_button/index";
+import {ResizeHandle} from "@/components/resize_handle";
 
 const Root = () => {
 
     useControlParameterIndexUpdater();
     return (
         <div
-            className="fill-background flex flex-col h-screen relative select-none"
+            className=" flex flex-col h-screen relative select-none justify-around "
+            style={{
+                background: 'var(--background)',
+                color: 'var(--text)'
+            }}
+
         >
-            <div className="w-full ml-0.5">
+            <div className="w-full ml-0.5  h-[30%] flex flex-col justify-between px-2">
                 <Knob identifier={Parameters.Input} showMidpointIndicator={false}/>
                 <Toggle identifier={Parameters.Binaural}/>
-                {/*<Knob identifier={Parameters.SpeakerPosition}/>*/}
-                {/*<Knob identifier={Parameters.SpeakerWidth}/>*/}
-
             </div>
-            <div className="w-full ml-0.5">
+            <div className="w-full  ml-0.5 h-[70%]">
                 <TVKnob posIdentifier={Parameters.SpeakerPosition} widthIdentifier={Parameters.SpeakerWidth}/>
             </div>
+            <ResizeHandle/>
         </div>
     );
 };

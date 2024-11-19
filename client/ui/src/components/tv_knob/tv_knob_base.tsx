@@ -104,7 +104,7 @@ const TVKnobBase = ({
             {/*    {name}*/}
             {/*</KnobHeadlessLabel>*/}
 
-            <div className={" mt-0.5 text-xl h-[80%] w-full flex items-center justify-center"}>
+            <div className={" mt-0.5 text-xl h-[75%] w-full flex items-centre justify-around"}>
                 {posEnabled ? (
                     <KnobHeadless
                         id={PosknobId}
@@ -175,14 +175,19 @@ const TVKnobBase = ({
 
                 )}
             </div>
-            <KnobHeadlessOutput htmlFor={PosknobId}
-                                className=" mt-0.5 text-xl h-[10%] flex items-center justify-center">
-                Midpoint: {valueRawDisplayFn(valuesRaw[0])}
-            </KnobHeadlessOutput>
-            <KnobHeadlessOutput htmlFor={WidthknobId}
-                                className="mt-0.5 text-xl h-[10%] flex items-center justify-center">
-                Width: {valueRawDisplayFn(valuesRaw[1])}
-            </KnobHeadlessOutput>
+            <div className={"flex flex-row h-[25%] items-center justify-around p-2"}>
+                <KnobHeadlessOutput htmlFor={PosknobId}
+                                    className="  text-xl flex flex-col">
+                    <div> Midpoint</div>
+                    <div> {valueRawDisplayFn(valuesRaw[0])} </div>
+                </KnobHeadlessOutput>
+                <KnobHeadlessOutput htmlFor={WidthknobId}
+                                    className=" text-xl flex flex-col">
+                    <div> Width</div>
+                    <div> {valueRawDisplayFn(valuesRaw[1])}
+                    </div>
+                </KnobHeadlessOutput>
+            </div>
 
         </div>
     )

@@ -96,9 +96,9 @@ const TVKnobBaseThumb: FC<{
 
 
     return (
-        <div className=" relative w-full h-full">
+        <div className=" w-full">
             <svg
-                className="w-full h-full relative "
+                className="w-full relative"
                 viewBox="-100 -100 100 100"
             >
                 <g transform="translate(-50, -50)">
