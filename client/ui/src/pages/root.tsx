@@ -18,10 +18,14 @@ const Root = () => {
                 background: 'var(--background)',
                 color: 'var(--text)'
             }}
-
         >
             <div className="w-full ml-0.5  h-[30%] flex flex-col justify-between px-2">
-                <Knob identifier={Parameters.Input} showMidpointIndicator={false}/>
+                <div className={"flex flex-row items-center"}>
+                    < Knob identifier={Parameters.Input} showMidpointIndicator={false}/>
+                    <h1 className={"text-6xl font-bold text-center flex-grow items-center"}>
+                        BINAURALISER
+                    </h1>
+                </div>
                 <Toggle identifier={Parameters.Binaural}/>
             </div>
             <div className="w-full  ml-0.5 h-[70%]">
@@ -29,7 +33,8 @@ const Root = () => {
             </div>
             <ResizeHandle/>
         </div>
-    );
+    )
+        ;
 };
 
 export default () => (

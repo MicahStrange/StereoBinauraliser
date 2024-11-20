@@ -75,11 +75,11 @@ const KnobBase = ({
     return (
         <div
             className={cn(
-                "w-fit flex flex-col justify-center items-center text-xs select-none",
+                "w-fit flex flex-col justify-between items-center select-none",
                 // "outline-none focus-within:outline-1 focus-within:outline-offset-4 focus-within:outline-muted", disabled focus outline
             )}
         >
-            <KnobHeadlessLabel id={labelId} className="text-primary mb-2">
+            <KnobHeadlessLabel id={labelId} className="text-primary  text-xl">
                 {name}
             </KnobHeadlessLabel>
             <KnobHeadless
@@ -115,7 +115,7 @@ const KnobBase = ({
                     trackFromMidpoint={trackFromMidpoint}
                 />
             </KnobHeadless>
-            <KnobHeadlessOutput htmlFor={knobId} className="mt-0.5">
+            <KnobHeadlessOutput htmlFor={knobId} className="mt-0.5 text-xl">
                 {valueRawDisplayFn(valueRaw)}
             </KnobHeadlessOutput>
         </div>

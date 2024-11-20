@@ -7,7 +7,7 @@ const angleMax = 145;
 
 const arc_gen = arc();
 const arc_style: DefaultArcObject = {
-    innerRadius: 110,
+    innerRadius: 100,
     outerRadius: 120,
     startAngle: (angleMin / 180) * Math.PI,
     endAngle: (angleMax / 180) * Math.PI,
