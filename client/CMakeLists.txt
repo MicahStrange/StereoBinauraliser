@@ -10,6 +10,7 @@ set(LINK_COMMON
         movingaverage
         model
         sofa_renderer
+        udp_receiver
 )
 
 set(SOURCES

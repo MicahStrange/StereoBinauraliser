@@ -2,6 +2,7 @@
 #include "SofaFilter.h"
 #include "SofaRenderer.h"
 #include "model/ParameterTree.h"
+#include "udp_receiver/UDPReceiver.h"
 
 #include <juce_core/juce_core.h>
 #include <juce_dsp/juce_dsp.h>
@@ -49,4 +50,6 @@ private:
     };
 
     SavedParams saved_params_;
+
+    UDPReceiver udp_receiver_;
 };
