@@ -1,6 +1,5 @@
 #pragma once
 
-#include "BufferTransfer.h"
 #include "TimeVaryingConvolver.h"
 
 #include <juce_core/juce_core.h>
@@ -27,8 +26,6 @@ private:
     static constexpr int kRightChannel = 1;
 
     float sample_rate_;
-
-    BufferTransfer buffer_transfer_;
 
     juce::ThreadPool thread_pool_;
     //    zones::ConvolutionEngine convolver_ {thread_pool_};

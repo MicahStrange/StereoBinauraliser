@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(FilterLibrary VERSION 1.0)
+project(StereoBinauraliser VERSION 1.0)
 
 enable_testing()
 
