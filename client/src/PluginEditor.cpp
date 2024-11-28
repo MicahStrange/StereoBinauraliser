@@ -78,14 +78,22 @@ PluginEditor::PluginEditor (PluginProcessor & p)
     : AudioProcessorEditor (&p)
     , processorRef (p)
     , parameter_relay_ (web_browser_component_)
-    , web_browser_component_ (kBaseWebOptions.withOptionsFrom (parameter_relay_))
+    , head_tracking_relay_ (p.udp_receiver_)
+    , web_browser_component_ (kBaseWebOptions.withOptionsFrom (parameter_relay_)
+                                  .withOptionsFrom (head_tracking_relay_)
+                                  .withOptionsFrom (resize_relay_))
     , parameter_attachments_ (parameter_relay_, p.parameter_tree_state_)
 {
     juce::ignoreUnused (processorRef);
     asset_directory_ = GetAssetsDirectory ();
 
-    setSize (600, 600);
+    setSize (600, 800);
     setResizable (true, true);
+    setResizeLimits (kWindowMinimumWidth,
+                     kWindowMinimumHeight,
+                     kWindowMaxWidth,
+                     static_cast<int> (kWindowMaxWidth * kPreferredAspectRatio));
+    resize_relay_.Setup (this, getConstrainer ());
 
 #if DEV_LOCALHOST
     web_browser_component_.goToURL (kLocalDevServerAddress);

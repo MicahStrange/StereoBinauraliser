@@ -23,8 +23,6 @@ public:
 
         if (socket.bindToPort (port))
         {
-            DBG ("Listening on UDP port " + juce::String (port));
-
             while (! threadShouldExit ())
             {
                 char buffer [110];
@@ -32,34 +30,42 @@ public:
 
                 if (bytesReceived > 0)
                 {
-                    // Successfully received data
-                    DBG ("Received " + juce::String (bytesReceived));
-
-                    // Print the received data (optional)
                     juce::String receivedMessage (buffer, bytesReceived);
                     auto tokens = juce::StringArray::fromTokens (receivedMessage, ",", "");
 
                     head_position_.yaw = static_cast<float> (tokens [0].getFloatValue ());
                     head_position_.pitch = static_cast<float> (tokens [1].getFloatValue ());
                     head_position_.roll = static_cast<float> (tokens [2].getFloatValue ());
-                    DBG ("Message: " + receivedMessage);
-                    //                    DBG ("yaw:" + juce::String (head_position_.yaw));
-                    //                    DBG ("pitch:" + juce::String (head_position_.pitch));
-                    //                    DBG ("roll:" + juce::String (head_position_.roll));
                 }
                 else
                 {
-                    DBG ("no message");
+                    empty_call_counter_ += 1;
+                    if (empty_call_counter_ >= kMaxEmptyCallsBeforeReset)
+                    {
+                        head_position_.yaw = 0.f;
+                        head_position_.pitch = 0.f;
+                        head_position_.roll = 0.f;
+
+                        empty_call_counter_ = 0;
+                    }
                 }
-                wait (10);
+                wait (20);
             }
         }
         else
         {
             DBG ("Failed to bind socket to port " + juce::String (port));
+            empty_call_counter_ = 0;
         }
     }
-    HeadPosition head_position_;
+
+    std::pair<float, float> GetHeadPosition ()
+    {
+        return {head_position_.yaw.load (), head_position_.pitch.load ()};
+    }
 
 private:
+    HeadPosition head_position_;
+    const int kMaxEmptyCallsBeforeReset = 100;
+    int empty_call_counter_ = 0;
 };

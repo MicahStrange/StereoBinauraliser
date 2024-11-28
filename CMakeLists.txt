@@ -6,7 +6,8 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
+#
+find_package(nlohmann_json 3.2.0 REQUIRED)
 
 include(module_common.cmake)
 

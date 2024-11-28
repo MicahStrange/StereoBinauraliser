@@ -4,8 +4,9 @@
 
 #include "SofaStereoRenderer.h"
 
-SofaStereoRenderer::SofaStereoRenderer (ParameterTree & parameter_tree)
+SofaStereoRenderer::SofaStereoRenderer (ParameterTree & parameter_tree, UDPReceiver & udp_receiver)
     : parameter_tree_ (parameter_tree)
+    , udp_receiver_ (udp_receiver)
 {
     for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
     {
@@ -15,12 +16,9 @@ SofaStereoRenderer::SofaStereoRenderer (ParameterTree & parameter_tree)
                                                        right_delays_ [buffer_index],
                                                        kSphericalCoordinates [buffer_index]);
     }
-
-    udp_receiver_.startThread ();
 }
 SofaStereoRenderer::~SofaStereoRenderer ()
 {
-    udp_receiver_.stopThread (100);
 }
 
 void SofaStereoRenderer::prepare (const juce::dsp::ProcessSpec & spec)
@@ -52,8 +50,9 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
     if (*parameter_tree_.binaural_parameter > 0.5)
         return;
 
-    float headpos_yaw = udp_receiver_.head_position_.yaw;
-    float headpos_pitch = udp_receiver_.head_position_.pitch;
+    //    float headpos_yaw = udp_receiver_.head_position_.yaw;
+    //    float headpos_pitch = udp_receiver_.head_position_.pitch;
+    auto [headpos_pitch, headpos_yaw] = udp_receiver_.GetHeadPosition ();
 
     for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
     {

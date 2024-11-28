@@ -45,6 +45,8 @@ public:
     ParameterTree parameter_tree_;
     juce::AudioProcessorValueTreeState parameter_tree_state_;
 
+    UDPReceiver udp_receiver_;
+
 private:
     void UpdateParameters ();
 

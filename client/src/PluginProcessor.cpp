@@ -11,12 +11,14 @@ PluginProcessor::PluginProcessor ()
                              nullptr,
                              ParameterTree::kParameterTreeIdentifier,
                              CreateParameterLayout ())
-    , sofa_stereo_renderer_ (parameter_tree_)
+    , sofa_stereo_renderer_ (parameter_tree_, udp_receiver_)
 {
+    udp_receiver_.startThread ();
 }
 
 PluginProcessor::~PluginProcessor ()
 {
+    udp_receiver_.stopThread (100);
 }
 
 //==============================================================================

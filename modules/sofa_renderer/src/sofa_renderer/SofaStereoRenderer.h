@@ -10,7 +10,7 @@
 class SofaStereoRenderer : public juce::dsp::ProcessorBase
 {
 public:
-    SofaStereoRenderer (ParameterTree & parameter_tree);
+    SofaStereoRenderer (ParameterTree & parameter_tree, UDPReceiver & udp_receiver);
     ~SofaStereoRenderer ();
 
     void prepare (const juce::dsp::ProcessSpec & spec);
@@ -25,7 +25,7 @@ private:
     std::array<SofaRenderer, 2> sofa_renderers_;
     SofaFilter sofa_filter_ {SofaFilter::OpenOptions {
         .hrtf_path = std::filesystem::path (
-            "/Users/micahstrange/FilterLibrary/modules/sofa_renderer/src/my_hrtf/MIT_KEMAR_normal_pinna.sofa"),
+            "/Users/micahstrange/StereoBinauraliser/modules/sofa_renderer/src/my_hrtf/MIT_KEMAR_normal_pinna.sofa"),
         .sample_rate = 48000,
     }};
     std::array<juce::AudioBuffer<float>, 2> hrir_buffers_;
@@ -51,5 +51,5 @@ private:
 
     SavedParams saved_params_;
 
-    UDPReceiver udp_receiver_;
+    UDPReceiver & udp_receiver_;
 };

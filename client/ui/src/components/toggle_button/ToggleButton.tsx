@@ -23,7 +23,7 @@ const ToggleButton: FC<ToggleButtonProps>
                         background: active ? 'var(--highlight)' : "none",
                         fontWeight: active ? 'bold' : 'normal',
                         color: active ? 'var(--text)' : 'var(--text-disabled)',
-                        borderRadius: 4,
+                        borderRadius: 0,
                     }}>
                         {leftText}
                     </div>
@@ -31,7 +31,7 @@ const ToggleButton: FC<ToggleButtonProps>
                         background: !active ? 'var(--highlight)' : "none",
                         fontWeight: !active ? 'bold' : 'normal',
                         color: !active ? 'var(--text)' : 'var(--text-disabled)',
-                        borderRadius: 4,
+                        borderRadius: 0,
                     }}>
                         {rightText}
                     </div>

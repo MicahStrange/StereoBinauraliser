@@ -1,7 +1,9 @@
 #pragma once
 
 #include "PluginProcessor.h"
+#include "relays/HeadTrackingRelay.h"
 #include "relays/ParameterRelay.h"
+#include "relays/ResizeRelay.h"
 
 #include <juce_gui_extra/juce_gui_extra.h>
 
@@ -41,7 +43,14 @@ private:
             .withResourceProvider ([this] (const auto & url) { return GetResource (url); },
                                    juce::URL {kLocalDevServerAddress}.getOrigin ());
 
+    static constexpr float kPreferredAspectRatio = 3.f / 4.f;
+    static constexpr int kWindowMinimumWidth = 600;
+    static constexpr int kWindowMinimumHeight = 700;
+    static constexpr int kWindowMaxWidth = 1000;
+
     ParameterRelay parameter_relay_;
+    HeadTrackingRelay head_tracking_relay_;
+    ResizeRelay resize_relay_;
     SinglePageBrowser web_browser_component_;
 
     ParameterAttachments parameter_attachments_;

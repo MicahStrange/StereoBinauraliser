@@ -10,6 +10,7 @@ set(LINK_COMMON
         model
         sofa_renderer
         udp_receiver
+        nlohmann_json::nlohmann_json
 )
 
 set(SOURCES
@@ -19,6 +20,10 @@ set(SOURCES
         src/PluginEditor.cpp
         src/relays/ParameterRelay.cpp
         src/relays/ParameterRelay.h
+        src/relays/HeadTrackingRelay.cpp
+        src/relays/HeadTrackingRelay.h
+        src/relays/ResizeRelay.h
+        src/relays/ResizeRelay.cpp
 )
 
 option(DEV_LOCALHOST OFF)
