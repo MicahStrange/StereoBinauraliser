@@ -9,3 +9,6 @@
 [submodule "zones_convolver"]
 	path = zones_convolver
 	url = git@github.com:zones-convolution/zones_convolver.git
+[submodule "libmysofa"]
+	path = libmysofa
+	url = git@github.com:hoene/libmysofa.git
