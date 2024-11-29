@@ -1,4 +1,4 @@
-set(BINARY FilterLibrary)
+set(BINARY StereoBinauraliser)
 
 
 set(LINK_JUCE
@@ -7,8 +7,10 @@ set(LINK_JUCE
         juce::juce_audio_utils)
 
 set(LINK_COMMON
-        movingaverage
         model
+        sofa_renderer
+        udp_receiver
+        nlohmann_json::nlohmann_json
 )
 
 set(SOURCES
@@ -18,6 +20,10 @@ set(SOURCES
         src/PluginEditor.cpp
         src/relays/ParameterRelay.cpp
         src/relays/ParameterRelay.h
+        src/relays/HeadTrackingRelay.cpp
+        src/relays/HeadTrackingRelay.h
+        src/relays/ResizeRelay.h
+        src/relays/ResizeRelay.cpp
 )
 
 option(DEV_LOCALHOST OFF)
@@ -25,12 +31,12 @@ set(ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ui/dist/)
 
 juce_add_plugin(
         ${BINARY}
-        PLUGIN_MANUFACTURER_CODE Filt
-        PLUGIN_CODE Filt
-        PRODUCT_NAME FilterLibrary
-        COMPANY_NAME FilterLibrary
-        BUNDLE_ID com.filterlibrary.filterlibrary
-        ../VERSION 0.0.2
+        PLUGIN_MANUFACTURER_CODE Sbin
+        PLUGIN_CODE Sbin
+        PRODUCT_NAME StereoBinauraliser
+        COMPANY_NAME StereoBinauraliser
+        BUNDLE_ID com.stereobinauraliser.stereobinauraliser
+        ../VERSION 0.0.3
         FORMATS AU VST3 Standalone
         COPY_PLUGIN_AFTER_BUILD TRUE
         NEEDS_WEBVIEW2 TRUE)
@@ -47,8 +53,11 @@ target_link_libraries(
         ${BINARY}
         PRIVATE ${LINK_JUCE} ${LINK_COMMON}
         PUBLIC ${MODULE_LINK_CONF})
+#
+#target_compile_options(${BINARY} INTERFACE -Wall -Wextra -Werror)
 
-target_compile_options(${BINARY} INTERFACE -Wall -Wextra -Werror)
+
+target_compile_options(${BINARY} INTERFACE -Wall -Wextra)
 
 if (NOT DEV_LOCALHOST)
     get_target_property(ACTIVE_TARGETS ${BINARY} JUCE_ACTIVE_PLUGIN_TARGETS)

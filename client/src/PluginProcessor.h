@@ -1,5 +1,7 @@
 #pragma once
 
+#include "sofa_renderer/SofaStereoRenderer.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #if (MSVC)
@@ -7,7 +9,6 @@
 #endif
 
 #include "model/ParameterTree.h"
-#include "movingaverage/MovingAverage.h"
 
 class PluginProcessor : public juce::AudioProcessor
 {
@@ -44,13 +45,15 @@ public:
     ParameterTree parameter_tree_;
     juce::AudioProcessorValueTreeState parameter_tree_state_;
 
+    UDPReceiver udp_receiver_;
+
 private:
     void UpdateParameters ();
 
     juce::AudioProcessorValueTreeState::ParameterLayout CreateParameterLayout ();
 
+    SofaStereoRenderer sofa_stereo_renderer_;
+
     juce::SmoothedValue<float> smoothed_input_gain_;
-    MovingAverage moving_average_low_;
-    MovingAverage moving_average_high_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

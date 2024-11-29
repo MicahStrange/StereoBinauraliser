@@ -2,60 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --primary: 220.47 98.26% 36.08%;
-        --primary-foreground: 210 40% 98%;
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
-        --destructive: 0 92.99% 56.11%;
-        --destructive-foreground: 210 40% 98%;
-        --ring: 220.67 97.83% 36.08%;
-        --radius: 0.0rem;
-    }
 
-    .dark {
-        --background: 240 13.73% 10%;
-        --foreground: 229.76 31.78% 74.71%;
-        --muted: 232.5 15.44% 18.32%;
-        --muted-foreground: 233.79 11.37% 50%;
-        --popover: 234.55 17.46% 12.35%;
-        --popover-foreground: 234 12.4% 52.55%;
-        --card: 234.55 17.46% 12.35%;
-        --card-foreground: 229.76 31.78% 74.71%;
-        --border: 232.5 15.38% 30.59%;
-        --input: 232 20% 14.71%;
-        --primary: 0 0% 82.75%;
-        --primary-foreground: 0 0% 20%;
-        --secondary: 225.45 71.22% 72.75%;
-        --secondary-foreground: 234.55 17.46% 12.35%;
-        --accent: 234.55 17.83% 9.47%;
-        --accent-foreground: 0 0% 82.75%;
-        --destructive: 1.58 47.5% 52.94%;
-        --destructive-foreground: 210 40% 98.04%;
-        --ring: 225.45 71.22% 72.75%;
-    }
+:root {
+    --background: #312828;
+    --ring: #2f1a1c;
+    --primary: #823b42;
+    --secondary: #af5b55;
+    --secondary-background: #ef836d;
+    --highlight: #f2b582;
+    --text: #f6f5ff;
+    --text-disabled: #9f9dab;
 }
 
-
-@layer base {
-    * {
-        @apply border-border;
-    }
-
-    body {
-        @apply bg-background text-foreground;
-    }
+.fill-background {
+    fill: var(--background);
 }
+
+.fill-ring {
+    fill: var(--ring);
+}
+
+.fill-primary {
+    fill: var(--primary);
+}
+
+.fill-secondary {
+    fill: var(--secondary);
+}
+
+.fill-secondary-background {
+    fill: var(--secondary-background);
+}
+
+.fill-highlight {
+    fill: var(--highlight);
+}
+
+.fill-text {
+    fill: var(--text);
+}
+
+.fill-text-disabled {
+    fill: var(--text-disabled);
+}
+
+.ToggleButton {
+    /*padding: 10% 10%;*/
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--primary);
+    border: 3px solid var(--secondary-background);
+    border-radius: 1px;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    opacity: 100%;
+}
+

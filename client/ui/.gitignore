@@ -23,5 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 cmake-build-debug
-
-*storybook.log

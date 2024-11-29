@@ -1,3 +1,3 @@
-add_subdirectory(movingaverage)
 add_subdirectory(model)
 add_subdirectory(sofa_renderer)
+add_subdirectory(udp_receiver)

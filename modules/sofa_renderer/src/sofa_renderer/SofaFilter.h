@@ -1,9 +1,9 @@
 #pragma once
 
 #include <filesystem>
-#include <hrtf/mysofa.h>
 #include <juce_core/juce_core.h>
 #include <juce_dsp/juce_dsp.h>
+#include <mysofa.h>
 
 class SofaFilter
 {

@@ -1,13 +1,20 @@
 #include "SofaRenderer.h"
 
-void SofaRenderer::prepare (const juce::dsp::ProcessSpec & spec)
+SofaRenderer::SofaRenderer ()
+{
+}
+
+void SofaRenderer::Prepare (const juce::dsp::ProcessSpec & spec, const int max_ir_num_samples)
 {
     sample_rate_ = spec.sampleRate;
-    convolver_.prepare (spec);
+    convolver_.Prepare (spec, max_ir_num_samples);
     auto mono_spec = spec;
     mono_spec.numChannels = 1;
     for (auto & delay_line : delay_lines_)
         delay_line.prepare (mono_spec);
+
+    hrir_buffer_.setSize (2, max_ir_num_samples);
+    hrir_buffer_.clear ();
 }
 
 void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
@@ -17,10 +24,9 @@ void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
 {
     left_delay_ = left_delay;
     right_delay_ = right_delay;
-    juce::AudioBuffer<float> hrir_buffer {static_cast<int> (hrir.getNumChannels ()),
-                                          static_cast<int> (hrir.getNumSamples ())};
-    hrir.copyTo (hrir_buffer);
-    buffer_transfer_.set (BufferWithSampleRate {std::move (hrir_buffer), sample_rate});
+
+    hrir_buffer_.clear ();
+    hrir.copyTo (hrir_buffer_);
 
     auto left_delay_samples = juce::roundToInt (left_delay_ * sample_rate_);
     auto right_delay_samples = juce::roundToInt (right_delay_ * sample_rate_);
@@ -32,20 +38,11 @@ void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
     delay_lines_ [kRightChannel].setDelay (right_delay_samples);
 }
 
-void SofaRenderer::process (const juce::dsp::ProcessContextNonReplacing<float> & processContext)
+void SofaRenderer::Process (const juce::dsp::ProcessContextNonReplacing<float> & processContext,
+                            const std::optional<juce::dsp::AudioBlock<float>> & ir)
 {
     jassert (processContext.getInputBlock ().getNumChannels () == 1);
     jassert (processContext.getOutputBlock ().getNumChannels () == 2);
-
-    buffer_transfer_.get (
-        [&] (BufferWithSampleRate & transfer_buffer)
-        {
-            convolver_.loadImpulseResponse (std::move (transfer_buffer.buffer),
-                                            transfer_buffer.sampleRate,
-                                            juce::dsp::Convolution::Stereo::yes,
-                                            juce::dsp::Convolution::Trim::no,
-                                            juce::dsp::Convolution::Normalise::no);
-        });
 
     auto input_block = processContext.getInputBlock ();
 
@@ -56,10 +53,10 @@ void SofaRenderer::process (const juce::dsp::ProcessContextNonReplacing<float> &
 
     auto output_block = processContext.getOutputBlock ();
 
-    juce::dsp::ProcessContextNonReplacing<float> doubled_process_context {duplicated_input_block,
-                                                                          output_block};
+    output_block.copyFrom (duplicated_input_block);
+    juce::dsp::ProcessContextReplacing<float> process_context {output_block};
 
-    convolver_.process (doubled_process_context);
+    convolver_.Process (process_context, ir);
 
     auto left_block = output_block.getSingleChannelBlock (kLeftChannel);
     auto right_block = output_block.getSingleChannelBlock (kRightChannel);
@@ -73,7 +70,7 @@ void SofaRenderer::process (const juce::dsp::ProcessContextNonReplacing<float> &
 
 void SofaRenderer::reset ()
 {
-    convolver_.reset ();
+    convolver_.Reset ();
     for (auto & delay_line : delay_lines_)
         delay_line.reset ();
 }

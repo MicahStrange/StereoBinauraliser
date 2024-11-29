@@ -16,14 +16,3 @@ function(add_module)
             ${PARSED_ARGS_DEPS})
 endfunction(add_module)
 
-function(add_test)
-    cmake_parse_arguments(PARSED_ARGS "" "MODULE" "SOURCES;DEPS" ${ARGN})
-
-    set(BINARY_TST ${PARSED_ARGS_MODULE}_test)
-    add_executable(${BINARY_TST})
-    target_sources(${BINARY_TST} PRIVATE ${PARSED_ARGS_SOURCES})
-    target_link_libraries(
-            ${BINARY_TST}
-            PRIVATE ${PARSED_ARGS_DEPS} Catch2::Catch2WithMain
-            PUBLIC ${MODULE_LINK_CONF})
-endfunction(add_test)

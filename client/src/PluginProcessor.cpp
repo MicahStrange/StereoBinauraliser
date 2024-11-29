@@ -11,13 +11,14 @@ PluginProcessor::PluginProcessor ()
                              nullptr,
                              ParameterTree::kParameterTreeIdentifier,
                              CreateParameterLayout ())
-    , moving_average_low_ (parameter_tree_)
-    , moving_average_high_ (parameter_tree_, true)
+    , sofa_stereo_renderer_ (parameter_tree_, udp_receiver_)
 {
+    udp_receiver_.startThread ();
 }
 
 PluginProcessor::~PluginProcessor ()
 {
+    udp_receiver_.stopThread (100);
 }
 
 //==============================================================================
@@ -97,16 +98,13 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
                                         static_cast<unsigned int> (getTotalNumInputChannels ())};
 
     smoothed_input_gain_.reset (spec.sampleRate, 0.1f);
-    moving_average_low_.prepare (spec);
-    moving_average_high_.prepare (spec);
+
+    sofa_stereo_renderer_.prepare (spec);
 }
 
 void PluginProcessor::releaseResources ()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
-    moving_average_low_.reset ();
-    moving_average_high_.reset ();
+    sofa_stereo_renderer_.reset ();
 }
 
 bool PluginProcessor::isBusesLayoutSupported (const BusesLayout & layouts) const
@@ -139,15 +137,12 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float> & buffer,
     juce::ignoreUnused (midiMessages);
 
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels ();
-    auto totalNumOutputChannels = getTotalNumOutputChannels ();
 
     auto block = juce::dsp::AudioBlock<float> (buffer);
     auto context_replacing = juce::dsp::ProcessContextReplacing<float> (block);
 
     context_replacing.getOutputBlock ().multiplyBy (smoothed_input_gain_);
-    moving_average_low_.process (context_replacing);
-    moving_average_high_.process (context_replacing);
+    sofa_stereo_renderer_.process (context_replacing);
 }
 
 //==============================================================================
