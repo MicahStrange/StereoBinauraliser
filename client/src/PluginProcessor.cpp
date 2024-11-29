@@ -137,8 +137,6 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float> & buffer,
     juce::ignoreUnused (midiMessages);
 
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels ();
-    auto totalNumOutputChannels = getTotalNumOutputChannels ();
 
     auto block = juce::dsp::AudioBlock<float> (buffer);
     auto context_replacing = juce::dsp::ProcessContextReplacing<float> (block);

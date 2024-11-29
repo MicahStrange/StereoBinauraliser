@@ -102,8 +102,6 @@ PluginEditor::PluginEditor (PluginProcessor & p)
 #endif
 
     addAndMakeVisible (web_browser_component_);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
 }
 
 PluginEditor::~PluginEditor ()

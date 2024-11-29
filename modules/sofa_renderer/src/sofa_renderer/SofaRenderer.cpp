@@ -24,14 +24,9 @@ void SofaRenderer::SetFilter (juce::dsp::AudioBlock<float> hrir,
 {
     left_delay_ = left_delay;
     right_delay_ = right_delay;
-    //    hrir_buffer_.setSize (static_cast<int> (hrir.getNumChannels ()),
-    //                          static_cast<int> (hrir.getNumSamples ()));
 
-    // can u clear on audio thread
     hrir_buffer_.clear ();
     hrir.copyTo (hrir_buffer_);
-
-    //    buffer_transfer_.set (BufferWithSampleRate {std::move (hrir_buffer_), sample_rate});
 
     auto left_delay_samples = juce::roundToInt (left_delay_ * sample_rate_);
     auto right_delay_samples = juce::roundToInt (right_delay_ * sample_rate_);
@@ -57,10 +52,6 @@ void SofaRenderer::Process (const juce::dsp::ProcessContextNonReplacing<float> &
         duplicated_input, 2, input_block.getNumSamples ()};
 
     auto output_block = processContext.getOutputBlock ();
-
-    //    juce::dsp::ProcessContextNonReplacing<float> doubled_process_context
-    //    {duplicated_input_block,
-    //                                                                          output_block};
 
     output_block.copyFrom (duplicated_input_block);
     juce::dsp::ProcessContextReplacing<float> process_context {output_block};

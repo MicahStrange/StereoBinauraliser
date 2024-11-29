@@ -23,8 +23,6 @@ private:
     void BeginFade ();
     void ResetFade ();
 
-    void ClearFilterPartition (std::vector<zones::ComplexBuffer> & filter_partitions);
-
     int fft_size_;
     std::unique_ptr<juce::dsp::FFT> fft_;
     int num_samples_to_discard_ = 0;

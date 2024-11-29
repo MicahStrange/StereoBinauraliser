@@ -49,13 +49,8 @@ void TimeVaryingConvolver::Prepare (const juce::dsp::ProcessSpec & spec,
 void TimeVaryingConvolver::Process (const juce::dsp::ProcessContextReplacing<float> & replacing,
                                     const std::optional<juce::dsp::AudioBlock<float>> & ir)
 {
-    // if ir, partition -> move to main or fade or pending
-    //  process main+ fade if its there
-
     if (ir != std::nullopt)
     {
-        //        auto partitioned_filter = PrepareIr (ir.value ());
-
         if (! main_filled_)
         {
             PrepareIr (ir.value (), main_filter_partitions_);
@@ -78,18 +73,6 @@ void TimeVaryingConvolver::Process (const juce::dsp::ProcessContextReplacing<flo
     if (! main_filled_)
         return;
 
-    // If the main part is filled,
-
-    // currentworking:
-    // at the start, progress fdl -> convolve each partition with filter (above 1) -> progress circ
-    // buf get input samples -> fft -> add to previous convolved -> ifft - > add to output
-    // new
-    // working: at the start progress fdl-> convolve each partition with filter 1 +2 and put in fdl
-    // conv 1 + 2
-    //->progress circ buff
-    // get input samples - > fft -> complexmultiply into ifftbuffer1 and ifftbuffer2
-    //-> inverse both -> apply cross fade to each block, add to output
-
     auto output_block = replacing.getOutputBlock ();
     auto num_channels = static_cast<int> (output_block.getNumChannels ());
     auto num_partitions = static_cast<int> (main_filter_partitions_.size ());
@@ -103,8 +86,7 @@ void TimeVaryingConvolver::Process (const juce::dsp::ProcessContextReplacing<flo
             frequency_delay_line_->GetNextBlock ();
             main_fdl_convolved_output_->Clear ();
             fade_fdl_convolved_output_->Clear ();
-            // Could start from index 2 and then not do the clear above, CMUL on
-            // partition[1]
+
             for (auto partition_index = 1; partition_index < num_partitions; ++partition_index)
             {
                 auto & previous_fdl_block =
@@ -191,19 +173,14 @@ void TimeVaryingConvolver::Process (const juce::dsp::ProcessContextReplacing<flo
     {
         if (fade_filled_)
         {
-            // move fade to main
-            // maybe cant assign this way??
             main_filter_partitions_ = fade_filter_partitions_;
-            //            ClearFilterPartition (fade_filter_partitions_);
             fade_filled_ = false;
             main_filled_ = true;
             ResetFade ();
 
-            // move pending to fade
             if (pending_filled_)
             {
                 fade_filter_partitions_ = pending_filter_partitions_;
-                //                ClearFilterPartition (pending_filter_partitions_);
                 pending_filled_ = false;
                 fade_filled_ = true;
                 BeginFade ();
@@ -274,23 +251,4 @@ void TimeVaryingConvolver::ResetFade ()
 {
     smoothed_value_in_.setCurrentAndTargetValue (0.0f);
     smoothed_value_out_.setCurrentAndTargetValue (1.0f);
-}
-
-void TimeVaryingConvolver::ClearFilterPartition (
-    std::vector<zones::ComplexBuffer> & filter_partitions)
-{
-    // probably not needed but cautious
-    for (auto & filter_partition : filter_partitions)
-    {
-        auto continous_block = filter_partition.GetContinuousBlock ();
-        continous_block.clear ();
-        for (auto sample_index = 0; sample_index < continous_block.getNumSamples (); ++sample_index)
-        {
-            for (auto channel_index = 0; channel_index < continous_block.getNumChannels ();
-                 ++channel_index)
-            {
-                continous_block.setSample (channel_index, sample_index, 0);
-            }
-        }
-    }
 }

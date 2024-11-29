@@ -30,9 +30,6 @@ void SofaFilter::GetFilterForSphericalCoordinates (
     auto coordinates = std::array<float, 3> {
         spherical_coordinates.azimuth_degrees, spherical_coordinates.elevation_degrees, 1.f};
     mysofa_s2c (coordinates.data ());
-    //    juce::Logger::writeToLog (juce::String ("X: " + juce::String (coordinates [0]) +
-    //                                            " Y: " + juce::String (coordinates [1]) +
-    //                                            " Z: " + juce::String (coordinates [2])));
 
     mysofa_getfilter_float (hrtf_,
                             coordinates [0],

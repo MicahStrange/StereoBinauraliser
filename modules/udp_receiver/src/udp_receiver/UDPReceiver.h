@@ -42,11 +42,7 @@ public:
                     empty_call_counter_ += 1;
                     if (empty_call_counter_ >= kMaxEmptyCallsBeforeReset)
                     {
-                        head_position_.yaw = 0.f;
-                        head_position_.pitch = 0.f;
-                        head_position_.roll = 0.f;
-
-                        empty_call_counter_ = 0;
+                        ResetHeadPosition ();
                     }
                 }
                 wait (20);
@@ -54,8 +50,7 @@ public:
         }
         else
         {
-            DBG ("Failed to bind socket to port " + juce::String (port));
-            empty_call_counter_ = 0;
+            ResetHeadPosition ();
         }
     }
 
@@ -65,6 +60,15 @@ public:
     }
 
 private:
+    void ResetHeadPosition ()
+    {
+        head_position_.yaw = 0.f;
+        head_position_.pitch = 0.f;
+        head_position_.roll = 0.f;
+
+        empty_call_counter_ = 0;
+    };
+
     HeadPosition head_position_;
     const int kMaxEmptyCallsBeforeReset = 100;
     int empty_call_counter_ = 0;

@@ -14,12 +14,10 @@ public:
     ~SofaStereoRenderer ();
 
     void prepare (const juce::dsp::ProcessSpec & spec);
-    void process (const juce::dsp::ProcessContextNonReplacing<float> & processContext);
     void reset ();
     void process (const juce::dsp::ProcessContextReplacing<float> & replacing) override;
 
 private:
-    bool ParamDiff (ParameterTree & parameter_tree);
     float sample_rate_;
 
     std::array<SofaRenderer, 2> sofa_renderers_;

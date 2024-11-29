@@ -50,8 +50,6 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
     if (*parameter_tree_.binaural_parameter > 0.5)
         return;
 
-    //    float headpos_yaw = udp_receiver_.head_position_.yaw;
-    //    float headpos_pitch = udp_receiver_.head_position_.pitch;
     auto [headpos_pitch, headpos_yaw] = udp_receiver_.GetHeadPosition ();
 
     for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
@@ -62,12 +60,6 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
             -1.f * (*parameter_tree_.speaker_position_parameter - headpos_yaw + (width / 2.f));
         SofaFilter::SphericalCoordinates coords {.azimuth_degrees = azimuth,
                                                  .elevation_degrees = -headpos_pitch};
-
-        //        DBG ("buffer: " + juce::String (buffer_index) + " ->" + juce::String (azimuth) + "
-        //        :" +
-        //             juce::String (headpos_yaw) + "+" +
-        //             juce::String (*parameter_tree_.speaker_position_parameter) + "+" +
-        //             juce::String (width / 2));
 
         sofa_filter_.GetFilterForSphericalCoordinates (hrir_buffers_ [buffer_index],
                                                        left_delays_ [buffer_index],
@@ -101,18 +93,4 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
 
         output_block.add (renderer_output_block);
     }
-}
-
-// Currently unused until integrated with headtracking
-bool SofaStereoRenderer::ParamDiff (ParameterTree & parameter_tree)
-{
-    bool result = true;
-    if (*parameter_tree.speaker_width_parameter == saved_params_.speaker_width_parameter &&
-        *parameter_tree.speaker_position_parameter == saved_params_.speaker_position_parameter)
-        result = false;
-
-    saved_params_.speaker_position_parameter = *parameter_tree.speaker_position_parameter;
-    saved_params_.speaker_width_parameter = *parameter_tree.speaker_width_parameter;
-
-    return result;
 }

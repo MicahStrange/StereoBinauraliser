@@ -27,8 +27,6 @@ private:
 
     float sample_rate_;
 
-    juce::ThreadPool thread_pool_;
-    //    zones::ConvolutionEngine convolver_ {thread_pool_};
     TimeVaryingConvolver convolver_;
 
     using SofaDelayLine = juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::None>;
