@@ -50,7 +50,7 @@ void SofaStereoRenderer::process (const juce::dsp::ProcessContextReplacing<float
     if (*parameter_tree_.binaural_parameter > 0.5)
         return;
 
-    auto [headpos_pitch, headpos_yaw] = udp_receiver_.GetHeadPosition ();
+    auto [headpos_yaw, headpos_pitch] = udp_receiver_.GetHeadPosition ();
 
     for (int buffer_index = 0; buffer_index < hrir_buffers_.size (); buffer_index++)
     {
