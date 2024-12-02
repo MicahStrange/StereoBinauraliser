@@ -1,19 +1,28 @@
 Stereo to binaural plugin demo that receives camera head-tracking data via UDP.
 
-The left and right inputs are convolved with HRIR's using [libmysofa](https://github.com/hoene/libmysofa)
-to become 'virtual loudspeakers' that can be moved around the head.
+## Demo Video
+
+[![Stereo Binauraliser Demo](https://img.youtube.com/vi/IzqgjK2pVpo/0.jpg)](https://www.youtube.com/watch?v=IzqgjK2pVpo)
+
+---
+
+## About
+
+The inputs are binauralised into 'virtual loudspeakers' that can be moved around the head.
+[libmysofa](https://github.com/hoene/libmysofa) is used to get the HRIR's for each position.
 I implemented a time-varying UDP convolver to cross-fade (in time-domain) between IR's.
 
 The binaural renderer was adapted from [Sonority](https://github.com/MicahStrange/sonority), and the convolver
-was built the UDP convolver in [Zones Convolver](https://github.com/zones-convolution/zones_convolver), and its utility
+was built from the UDP convolver in [Zones Convolver](https://github.com/zones-convolution/zones_convolver), and its
+utility
 classes.
 
 The head tracking is from [EACHeadtracker](https://github.com/eac-ufsm/webcam-headtracker). The
-python script is run from the terminal and sends Yaw and Pitch data using UDP.
+python script is run from the terminal and sends Yaw and Pitch data across UDP.
 
 Thanks to [Pamplejuice](https://github.com/sudara/pamplejuce) for the plugin template.
 
-### Improvements
+## Improvements
 
 There's quite a few improvements needed for this to be viable beyond a demo.
 
